@@ -1,17 +1,13 @@
 const mongoose = require('mongoose');
-const { MongoMemoryServer } = require('mongodb-memory-server');
-
-let mongoServer;
 
 /**
- * Connect to MongoDB using in-memory server (no external MongoDB installation needed)
+ * Connect to Persistent MongoDB using connection string
  */
 const connectDB = async () => {
   try {
-    mongoServer = await MongoMemoryServer.create();
-    const uri = mongoServer.getUri();
+    const uri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/smartwaste';
     await mongoose.connect(uri);
-    console.log('✅ MongoDB In-Memory Server connected');
+    console.log('✅ MongoDB connected securely to:', uri.split('@').pop().split('?')[0]);
     return mongoose.connection;
   } catch (error) {
     console.error('❌ MongoDB connection error:', error.message);
@@ -21,7 +17,6 @@ const connectDB = async () => {
 
 const disconnectDB = async () => {
   await mongoose.disconnect();
-  if (mongoServer) await mongoServer.stop();
 };
 
 module.exports = { connectDB, disconnectDB };

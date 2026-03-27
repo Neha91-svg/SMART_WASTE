@@ -110,7 +110,14 @@ const pickupRequests = [
  */
 async function seedDatabase() {
   try {
-    // Clear existing data
+    // Check if database is already populated
+    const count = await WasteReport.countDocuments();
+    if (count > 0) {
+      console.log('⚡ Persistent database detected. Skipping seed injection.');
+      return;
+    }
+
+    // Clear existing data (just in case)
     await WasteReport.deleteMany({});
     await PickupRequest.deleteMany({});
     await EWasteCenter.deleteMany({});
