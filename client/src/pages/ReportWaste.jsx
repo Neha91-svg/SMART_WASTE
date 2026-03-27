@@ -1,28 +1,35 @@
 import { useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
-import L from 'leaflet';
+import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import { reportWaste } from '../services/api';
 import { MdLocationOn, MdSend, MdCheckCircle } from 'react-icons/md';
 
-// Fix Leaflet default marker icon issue
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-});
+const mapContainerStyle = {
+  width: '100%',
+  height: '100%',
+  minHeight: '520px'
+};
 
-function LocationPicker({ onLocationSelect }) {
-  useMapEvents({
-    click(e) {
-      onLocationSelect({ lat: e.latlng.lat, lng: e.latlng.lng });
-    },
-  });
-  return null;
-}
+const center = {
+  lat: 19.076,
+  lng: 72.8777
+};
+
+const options = {
+  disableDefaultUI: true,
+  zoomControl: true,
+  styles: [
+    {
+      featureType: "poi",
+      elementType: "labels",
+      stylers: [{ visibility: "off" }]
+    }
+  ]
+};
+
+const libraries = ['places'];
 
 /**
- * Report Waste Page — Form with interactive map picker
+ * Report Waste Page — Form with interactive Google Map picker
  */
 export default function ReportWaste() {
   const [location, setLocation] = useState(null);
@@ -31,6 +38,11 @@ export default function ReportWaste() {
   const [wasteType, setWasteType] = useState('General');
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+    libraries,
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,6 +73,13 @@ export default function ReportWaste() {
   const levelColors = { High: '#ef4444', Medium: '#facc15', Low: '#10b981' };
   const levelEmojis = { High: '🔴', Medium: '🟡', Low: '🟢' };
 
+  const onMapClick = (e) => {
+    setLocation({
+      lat: e.latLng.lat(),
+      lng: e.latLng.lng()
+    });
+  };
+
   return (
     <div className="space-y-6 pb-6">
       {/* Page Header */}
@@ -84,32 +103,23 @@ export default function ReportWaste() {
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Map — 3 cols */}
-        <div className="lg:col-span-3 brutalist-card bg-white overflow-hidden" style={{ minHeight: '520px' }}>
-          <MapContainer
-            center={[19.076, 72.8777]}
-            zoom={12}
-            className="w-full h-full"
-            style={{ minHeight: '520px' }}
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-              url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-            />
-            <LocationPicker onLocationSelect={setLocation} />
-            {location && (
-              <Marker position={[location.lat, location.lng]}>
-                <Popup>
-                  <div className="p-1">
-                    <strong className="text-sm block border-b-2 border-black pb-1 mb-1 uppercase">Selected Location</strong>
-                    <div className="text-xs font-semibold mt-1">
-                      Lat: {location.lat.toFixed(5)}<br />
-                      Lng: {location.lng.toFixed(5)}
-                    </div>
-                  </div>
-                </Popup>
-              </Marker>
-            )}
-          </MapContainer>
+        <div className="lg:col-span-3 brutalist-card bg-white overflow-hidden relative" style={{ minHeight: '520px' }}>
+          {loadError && <div className="p-5 font-bold text-red-500">Error loading maps. Check API Key.</div>}
+          {!isLoaded ? (
+            <div className="flex items-center justify-center p-10 h-full w-full bg-gray-100">
+               <div className="spinner"></div>
+            </div>
+          ) : (
+            <GoogleMap
+              mapContainerStyle={mapContainerStyle}
+              zoom={12}
+              center={center}
+              options={options}
+              onClick={onMapClick}
+            >
+              {location && <Marker position={location} />}
+            </GoogleMap>
+          )}
         </div>
 
         {/* Form — 2 cols */}

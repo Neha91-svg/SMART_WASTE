@@ -1,29 +1,46 @@
 import { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polyline, CircleMarker } from 'react-leaflet';
-import L from 'leaflet';
+import { GoogleMap, useLoadScript, Marker, Polyline, InfoWindow } from '@react-google-maps/api';
 import { getWasteData, optimizeRoute } from '../services/api';
-import { MdRoute, MdPlayArrow, MdLocationOn } from 'react-icons/md';
+import { MdRoute, MdPlayArrow } from 'react-icons/md';
 
-// Fix Leaflet default marker icon
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-});
+const mapContainerStyle = {
+  width: '100%',
+  height: '100%',
+  minHeight: '550px'
+};
+
+const truckStart = { lat: 19.0760, lng: 72.8777 };
+
+const options = {
+  disableDefaultUI: true,
+  zoomControl: true,
+  styles: [
+    {
+      featureType: "poi",
+      elementType: "labels",
+      stylers: [{ visibility: "off" }]
+    }
+  ]
+};
+
+const libraries = ['places'];
 
 const levelColors = { High: '#ef4444', Medium: '#facc15', Low: '#10b981' };
 
 /**
- * Map Visualization Page — Interactive map with waste markers and optimized route
+ * Map Visualization Page — Interactive Google Map with waste markers and optimized route
  */
 export default function MapVisualization() {
   const [wasteData, setWasteData] = useState([]);
   const [routeData, setRouteData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loadingData, setLoadingData] = useState(true);
   const [optimizing, setOptimizing] = useState(false);
+  const [selectedWaste, setSelectedWaste] = useState(null);
 
-  const truckStart = { lat: 19.0760, lng: 72.8777 };
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+    libraries,
+  });
 
   useEffect(() => {
     fetchWasteData();
@@ -36,7 +53,7 @@ export default function MapVisualization() {
     } catch (err) {
       console.error('Failed to fetch waste data:', err);
     } finally {
-      setLoading(false);
+      setLoadingData(false);
     }
   };
 
@@ -53,18 +70,38 @@ export default function MapVisualization() {
     }
   };
 
-  if (loading) {
+  const getMarkerIcon = (level) => {
+    const color = levelColors[level] || '#9ca3af';
+    // SVG circle pin
+    const svg = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${color}" stroke="#121212" stroke-width="2">
+        <circle cx="12" cy="12" r="8" />
+      </svg>
+    `;
+    return {
+      url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`,
+      scaledSize: new window.google.maps.Size(level === 'High' ? 28 : level === 'Medium' ? 24 : 20),
+      anchor: new window.google.maps.Point(12, 12),
+    };
+  };
+
+  const truckIcon = {
+    url: 'https://cdn-icons-png.flaticon.com/512/2830/2830180.png',
+    scaledSize: window.google?.maps?.Size ? new window.google.maps.Size(36, 36) : null,
+  };
+
+  if (loadingData) {
     return (
       <div className="loading-container">
         <div className="text-center font-bold text-lg">
           <div className="spinner"></div>
-          <p>Loading map...</p>
+          <p>Loading map data...</p>
         </div>
       </div>
     );
   }
 
-  const routeCoordinates = routeData?.optimizedRoute?.map(p => [p.lat, p.lng]) || [];
+  const routeCoordinates = routeData?.optimizedRoute?.map(p => ({ lat: p.lat, lng: p.lng })) || [];
 
   return (
     <div className="space-y-6 pb-6">
@@ -96,65 +133,75 @@ export default function MapVisualization() {
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Map — 3 cols */}
-        <div className="lg:col-span-3 brutalist-card bg-white overflow-hidden" style={{ minHeight: '550px' }}>
-          <MapContainer
-            center={[19.076, 72.8777]}
-            zoom={12}
-            className="w-full h-full"
-            style={{ minHeight: '550px' }}
-          >
-            <TileLayer
-              attribution='&copy; OpenStreetMap'
-              url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-            />
+        <div className="lg:col-span-3 brutalist-card bg-white overflow-hidden relative" style={{ minHeight: '550px' }}>
+          {loadError && <div className="p-5 font-bold text-red-500">Error loading maps. Check API Key.</div>}
+          {!isLoaded ? (
+            <div className="flex items-center justify-center p-10 h-full w-full bg-gray-100">
+               <div className="spinner"></div>
+            </div>
+          ) : (
+            <GoogleMap
+              mapContainerStyle={mapContainerStyle}
+              zoom={12}
+              center={truckStart}
+              options={options}
+            >
+              {/* Truck start marker */}
+              <Marker 
+                position={truckStart} 
+                icon={truckIcon.scaledSize ? truckIcon : undefined} 
+                title="Truck Start Location"
+              />
 
-            {/* Truck start marker */}
-            <Marker position={[truckStart.lat, truckStart.lng]}>
-              <Popup>
-                <strong>🚛 Truck Start</strong><br />
-                Municipal Corporation Office
-              </Popup>
-            </Marker>
+              {/* Waste location markers */}
+              {wasteData.map((waste, i) => (
+                <Marker
+                  key={i}
+                  position={{ lat: waste.location.lat, lng: waste.location.lng }}
+                  icon={getMarkerIcon(waste.wasteLevel)}
+                  onClick={() => setSelectedWaste(waste)}
+                />
+              ))}
 
-            {/* Waste location markers */}
-            {wasteData.map((waste, i) => (
-              <CircleMarker
-                key={i}
-                center={[waste.location.lat, waste.location.lng]}
-                radius={waste.wasteLevel === 'High' ? 12 : waste.wasteLevel === 'Medium' ? 9 : 7}
-                fillColor={levelColors[waste.wasteLevel]}
-                fillOpacity={0.9}
-                stroke={true}
-                color={'#121212'}
-                weight={3}
-                opacity={1}
-              >
-                <Popup>
-                  <div className="p-1">
-                    <strong className="text-sm block border-b-2 border-black pb-1 mb-2 uppercase">{waste.address || 'Waste Point'}</strong>
+              {/* Info Window for Waste */}
+              {selectedWaste && (
+                <InfoWindow
+                  position={{ lat: selectedWaste.location.lat, lng: selectedWaste.location.lng }}
+                  onCloseClick={() => setSelectedWaste(null)}
+                >
+                  <div className="pr-2 min-w-[200px]">
+                    <strong className="text-sm block border-b-2 border-black pb-1 mb-2 uppercase">{selectedWaste.address || 'Waste Point'}</strong>
                     <div className="text-xs space-y-1 font-semibold">
-                      <div>Level: <span style={{ color: levelColors[waste.wasteLevel] }}>{waste.wasteLevel}</span></div>
-                      <div>Type: {waste.wasteType}</div>
-                      <div>Status: {waste.status}</div>
+                      <div>Level: <span style={{ color: levelColors[selectedWaste.wasteLevel] }}>{selectedWaste.wasteLevel}</span></div>
+                      <div>Type: {selectedWaste.wasteType}</div>
+                      <div>Status: {selectedWaste.status}</div>
                     </div>
                   </div>
-                </Popup>
-              </CircleMarker>
-            ))}
+                </InfoWindow>
+              )}
 
-            {/* Optimized route polyline */}
-            {routeCoordinates.length > 0 && (
-              <Polyline
-                positions={routeCoordinates}
-                pathOptions={{
-                  color: '#121212',
-                  weight: 5,
-                  opacity: 0.9,
-                  dashArray: '10, 8',
-                }}
-              />
-            )}
-          </MapContainer>
+              {/* Optimized route polyline */}
+              {routeCoordinates.length > 0 && (
+                <Polyline
+                  path={routeCoordinates}
+                  options={{
+                    strokeColor: '#121212',
+                    strokeOpacity: 0.9,
+                    strokeWeight: 5,
+                    icons: [{
+                      icon: {
+                        path: 'M 0,-1 0,1',
+                        strokeOpacity: 1,
+                        scale: 4
+                      },
+                      offset: '0',
+                      repeat: '20px'
+                    }],
+                  }}
+                />
+              )}
+            </GoogleMap>
+          )}
         </div>
 
         {/* Route Info Sidebar */}
@@ -169,12 +216,12 @@ export default function MapVisualization() {
                 { color: '#10b981', label: 'Low Priority' },
               ].map(item => (
                 <div key={item.label} className="flex items-center gap-2.5">
-                  <div className="w-4 h-4 rounded-sm border-2 border-black shadow-[1px_1px_0px_#121212]" style={{ background: item.color }}></div>
+                  <div className="w-4 h-4 rounded-full border-2 border-black shadow-[1px_1px_0px_#121212]" style={{ background: item.color }}></div>
                   <span className="text-[13px]">{item.label}</span>
                 </div>
               ))}
               <div className="flex items-center gap-2.5 pt-2 border-t-2 border-dashed border-gray-200">
-                <div className="w-5 h-0 border-t-[3px] border-dashed border-black"></div>
+                <div className="w-5 h-0 border-t-[3px] border-solid border-black"></div>
                 <span className="text-[13px]">Optimized Route</span>
               </div>
             </div>

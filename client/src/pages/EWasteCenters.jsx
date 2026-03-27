@@ -1,35 +1,42 @@
 import { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
+import { GoogleMap, useLoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 import { getEWasteCenters } from '../services/api';
 import { MdRecycling, MdPhone, MdAccessTime, MdLocationOn } from 'react-icons/md';
 
-// Fix Leaflet default marker icon
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-});
+const mapContainerStyle = {
+  width: '100%',
+  height: '100%',
+  minHeight: '600px'
+};
 
-// Custom green icon for e-waste centers
-const ewasteIcon = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
-});
+const options = {
+  disableDefaultUI: true,
+  zoomControl: true,
+  styles: [
+    {
+      featureType: "poi",
+      elementType: "labels",
+      stylers: [{ visibility: "off" }]
+    }
+  ]
+};
+
+const libraries = ['places'];
 
 /**
- * E-Waste Centers Page — List + Map view of nearby e-waste disposal centers
+ * E-Waste Centers Page — List + Google Map view of nearby e-waste disposal centers
  */
 export default function EWasteCenters() {
   const [centers, setCenters] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingData, setLoadingData] = useState(true);
   const [selectedCenter, setSelectedCenter] = useState(null);
   const [userLocation, setUserLocation] = useState({ lat: 19.076, lng: 72.8777 });
+  const [activeMarker, setActiveMarker] = useState(null); // ID of center showing InfoWindow
+
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+    libraries,
+  });
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -54,11 +61,21 @@ export default function EWasteCenters() {
     } catch (err) {
       console.error('Failed to fetch e-waste centers:', err);
     } finally {
-      setLoading(false);
+      setLoadingData(false);
     }
   };
 
-  if (loading) {
+  const ewasteIcon = {
+    url: 'https://cdn-icons-png.flaticon.com/512/3299/3299955.png', // Recycle pin icon
+    scaledSize: window.google?.maps?.Size ? new window.google.maps.Size(32, 32) : null,
+  };
+
+  const userIcon = {
+    url: 'https://cdn-icons-png.flaticon.com/512/3082/3082161.png', // User location pin
+    scaledSize: window.google?.maps?.Size ? new window.google.maps.Size(32, 32) : null,
+  };
+
+  if (loadingData) {
     return (
       <div className="loading-container">
         <div className="text-center font-bold text-lg">
@@ -85,7 +102,10 @@ export default function EWasteCenters() {
           {centers.map((center, i) => (
             <div
               key={i}
-              onClick={() => setSelectedCenter(center)}
+              onClick={() => {
+                setSelectedCenter(center);
+                setActiveMarker(center._id);
+              }}
               className={`brutalist-card p-4 cursor-pointer transition-all bg-white ${
                 selectedCenter?._id === center._id
                   ? 'border-[#10b981] shadow-[4px_4px_0px_#10b981] bg-[#f0fdf4]'
@@ -137,48 +157,56 @@ export default function EWasteCenters() {
         </div>
 
         {/* Map — 3 cols */}
-        <div className="lg:col-span-3 brutalist-card bg-white overflow-hidden" style={{ minHeight: '600px' }}>
-          <MapContainer
-            center={[userLocation.lat, userLocation.lng]}
-            zoom={11}
-            className="w-full h-full"
-            style={{ minHeight: '600px' }}
-          >
-            <TileLayer
-              attribution='&copy; OpenStreetMap'
-              url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-            />
+        <div className="lg:col-span-3 brutalist-card bg-white overflow-hidden relative" style={{ minHeight: '600px' }}>
+          {loadError && <div className="p-5 font-bold text-red-500">Error loading maps. Check API Key.</div>}
+          {!isLoaded ? (
+            <div className="flex items-center justify-center p-10 h-full w-full bg-gray-100">
+               <div className="spinner"></div>
+            </div>
+          ) : (
+            <GoogleMap
+              mapContainerStyle={mapContainerStyle}
+              zoom={11}
+              center={userLocation}
+              options={options}
+            >
+              {/* User location marker */}
+              <Marker 
+                position={userLocation} 
+                icon={userIcon.scaledSize ? userIcon : undefined} 
+                title="Your Location"
+              />
 
-            {/* User location marker */}
-            <Marker position={[userLocation.lat, userLocation.lng]}>
-              <Popup>
-                <div className="p-1 font-bold">📍 Your Location</div>
-              </Popup>
-            </Marker>
-
-            {/* E-waste center markers */}
-            {centers.map((center, i) => (
-              <Marker
-                key={i}
-                position={[center.location.lat, center.location.lng]}
-                icon={ewasteIcon}
-              >
-                <Popup>
-                  <div className="p-1">
-                    <strong className="text-sm block border-b-2 border-black pb-1 mb-1 uppercase">♻️ {center.name}</strong>
-                    <div className="text-xs font-semibold mt-1 space-y-0.5">
-                      <div>{center.address}</div>
-                      <div>📞 {center.contact}</div>
-                      <div>🕐 {center.operatingHours}</div>
-                      {center.distance !== undefined && (
-                        <div className="text-[#10b981] font-bold mt-1">📏 {center.distance} km away</div>
-                      )}
-                    </div>
-                  </div>
-                </Popup>
-              </Marker>
-            ))}
-          </MapContainer>
+              {/* E-waste center markers */}
+              {centers.map((center, i) => (
+                <Marker
+                  key={i}
+                  position={{ lat: center.location.lat, lng: center.location.lng }}
+                  icon={ewasteIcon.scaledSize ? ewasteIcon : undefined}
+                  onClick={() => {
+                    setSelectedCenter(center);
+                    setActiveMarker(center._id);
+                  }}
+                >
+                  {activeMarker === center._id && (
+                    <InfoWindow onCloseClick={() => setActiveMarker(null)}>
+                      <div className="pr-2 max-w-[200px]">
+                        <strong className="text-sm block border-b-2 border-black pb-1 mb-1 uppercase">♻️ {center.name}</strong>
+                        <div className="text-xs font-semibold mt-1 space-y-0.5">
+                          <div>{center.address}</div>
+                          <div>📞 {center.contact}</div>
+                          <div>🕐 {center.operatingHours}</div>
+                          {center.distance !== undefined && (
+                            <div className="text-[#10b981] font-bold mt-1">📏 {center.distance} km away</div>
+                          )}
+                        </div>
+                      </div>
+                    </InfoWindow>
+                  )}
+                </Marker>
+              ))}
+            </GoogleMap>
+          )}
         </div>
       </div>
     </div>
