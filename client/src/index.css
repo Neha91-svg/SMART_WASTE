@@ -1,0 +1,416 @@
+@import "tailwindcss";
+
+/* ============================================================
+   CUSTOM CSS FOR SMART WASTE COLLECTION APP
+   ============================================================ */
+
+:root {
+  --primary: #facc15;
+  --primary-dark: #eab308;
+  --secondary: #06b6d4;
+  --accent: #facc15;
+  --danger: #ef4444;
+  
+  --bg-dark: #121212;
+  --bg-sidebar: #1a1a1a;
+  --bg-card: #ffffff;
+  --bg-card-hover: #fafafa;
+  --bg-light: #fefce8;
+  
+  --text-primary: #121212;
+  --text-secondary: #475569;
+  --text-inverse: #f8fafc;
+  --border: #121212;
+
+  --sidebar-width: 240px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  background: var(--bg-light);
+  color: var(--text-primary);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Leaflet map fix */
+.leaflet-container {
+  background: #e2e8f0;
+  border-radius: 0;
+  z-index: 1;
+  font-family: inherit;
+  border: 3px solid var(--border);
+  box-shadow: 4px 4px 0px var(--border);
+}
+
+.leaflet-popup-content-wrapper {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 3px solid var(--border);
+  border-radius: 4px;
+  box-shadow: 4px 4px 0px var(--border);
+}
+
+.leaflet-popup-tip {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+}
+
+.leaflet-popup-content {
+  margin: 12px;
+  font-weight: 600;
+}
+
+/* ============================================================
+   BRUTALIST DESIGN SYSTEM
+   ============================================================ */
+
+.brutalist-card {
+  background: var(--bg-card);
+  border: 3px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 5px 5px 0px var(--border);
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+/* Page Header Block */
+.page-header {
+  background: var(--primary);
+  border: 3px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 5px 5px 0px var(--border);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.page-header .page-header-inner {
+  padding: 1.75rem 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .page-header .page-header-inner {
+    padding: 2.25rem 2rem;
+  }
+}
+
+.page-header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+
+@media (min-width: 768px) {
+  .page-header h1 {
+    font-size: 2.75rem;
+  }
+}
+
+.page-header .page-subtitle {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #374151;
+  background: white;
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  box-shadow: 2px 2px 0px var(--border);
+}
+
+/* Section Header */
+.section-title {
+  font-size: 0.875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-primary);
+  border-bottom: 3px solid var(--border);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Brutalist Table */
+.brutalist-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.brutalist-table th {
+  background: #fdf6cd;
+  border-bottom: 3px solid var(--border);
+  padding: 12px 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 11px;
+  text-align: left;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.brutalist-table td {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  background: #fff;
+  vertical-align: middle;
+}
+
+.brutalist-table tr:last-child td {
+  border-bottom: none;
+}
+
+.brutalist-table tr:hover td {
+  background: #fefce8;
+}
+
+/* Form inputs */
+.form-input {
+  background: #fff;
+  border: 3px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 16px;
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 500;
+  width: 100%;
+  transition: all 0.2s ease;
+  outline: none;
+  font-family: inherit;
+}
+
+.form-input:focus {
+  background: #fefce8;
+  box-shadow: 4px 4px 0px var(--border);
+  transform: translate(-2px, -2px);
+}
+
+.form-input::placeholder {
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+/* Button styles */
+.btn-primary {
+  background: var(--primary);
+  color: var(--text-primary);
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 15px;
+  border: 3px solid var(--border);
+  box-shadow: 4px 4px 0px var(--border);
+  cursor: pointer;
+  transition: all 0.1s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px var(--border);
+}
+
+.btn-primary:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0px var(--border);
+}
+
+.btn-primary:disabled {
+  background: #e2e8f0;
+  color: #94a3b8;
+  border-color: #94a3b8;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Badge variants */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: 2px solid var(--border);
+  background: #fff;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.badge-high { background: #fee2e2; }
+.badge-medium { background: #fef3c7; }
+.badge-low { background: #d1fae5; }
+.badge-pending { background: #fef3c7; }
+.badge-progress { background: #e0f2fe; }
+.badge-collected { background: #d1fae5; }
+
+/* Toggle Button Group */
+.toggle-btn {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  transition: all 0.15s ease;
+  border: 3px solid #cbd5e1;
+  background: white;
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-align: center;
+  font-family: inherit;
+}
+
+.toggle-btn:hover {
+  border-color: var(--border);
+  box-shadow: 3px 3px 0px var(--border);
+}
+
+.toggle-btn.active {
+  border-color: var(--border);
+  box-shadow: 3px 3px 0px var(--border);
+}
+
+/* Stat Card */
+.stat-card {
+  background: var(--bg-card);
+  border: 3px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 5px 5px 0px var(--border);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.15s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 6px 8px 0px var(--border);
+}
+
+.stat-card .stat-icon {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 6px;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  margin-bottom: 0.75rem;
+  box-shadow: 2px 2px 0px var(--border);
+}
+
+.stat-card .stat-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.stat-card .stat-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #6b7280;
+  margin-top: auto;
+}
+
+/* Loading Spinner */
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+}
+
+.spinner {
+  width: 3rem;
+  height: 3rem;
+  border: 4px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Success Alert */
+.success-alert {
+  background: #d1fae5;
+  border: 3px solid #10b981;
+  border-radius: 8px;
+  box-shadow: 4px 4px 0px #065f46;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.success-alert .alert-title {
+  font-weight: 800;
+  font-size: 1rem;
+  color: #065f46;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.success-alert .alert-text {
+  font-weight: 500;
+  color: #065f46;
+  font-size: 0.875rem;
+}
+
+/* Recharts overrides */
+.recharts-cartesian-grid-vertical line,
+.recharts-cartesian-grid-horizontal line {
+  stroke: #e2e8f0;
+}
+
+.recharts-text {
+  fill: #121212;
+  font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+}
