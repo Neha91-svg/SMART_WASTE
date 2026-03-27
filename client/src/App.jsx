@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import ReportWaste from './pages/ReportWaste';
@@ -21,12 +21,17 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<Layout role={role} setRole={setRole} />}>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/report-waste" element={<ReportWaste />} />
-          <Route path="/request-pickup" element={<RequestPickup />} />
-          <Route path="/map" element={<MapVisualization />} />
+          {/* Shared Routes */}
+          <Route path="/" element={<Dashboard role={role} />} />
           <Route path="/ewaste-centers" element={<EWasteCenters />} />
-          <Route path="/efficiency" element={<Efficiency />} />
+
+          {/* User Only Routes */}
+          <Route path="/report-waste" element={role === 'user' ? <ReportWaste /> : <Navigate to="/" replace />} />
+          <Route path="/request-pickup" element={role === 'user' ? <RequestPickup /> : <Navigate to="/" replace />} />
+
+          {/* Admin Only Routes */}
+          <Route path="/map" element={role === 'admin' ? <MapVisualization /> : <Navigate to="/" replace />} />
+          <Route path="/efficiency" element={role === 'admin' ? <Efficiency /> : <Navigate to="/" replace />} />
         </Route>
       </Routes>
     </BrowserRouter>

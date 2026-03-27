@@ -16,14 +16,21 @@ import {
  * Sidebar Component — Navigation with role toggle (Admin/User)
  */
 export default function Sidebar({ role, setRole, mobileOpen, setMobileOpen }) {
-  const navItems = [
-    { to: '/', icon: <MdDashboard size={22} />, label: 'Dashboard' },
-    { to: '/report-waste', icon: <MdDeleteOutline size={22} />, label: 'Report Waste' },
-    { to: '/request-pickup', icon: <MdLocalShipping size={22} />, label: 'Request Pickup' },
-    { to: '/map', icon: <MdMap size={22} />, label: 'Map View' },
-    { to: '/ewaste-centers', icon: <MdRecycling size={22} />, label: 'E-Waste Centers' },
-    { to: '/efficiency', icon: <MdSpeed size={22} />, label: 'Efficiency' },
+  const userNavItems = [
+    { to: '/', icon: <MdDashboard size={26} />, label: 'Dashboard' },
+    { to: '/report-waste', icon: <MdDeleteOutline size={26} />, label: 'Report Waste' },
+    { to: '/request-pickup', icon: <MdLocalShipping size={26} />, label: 'Request Pickup' },
+    { to: '/ewaste-centers', icon: <MdRecycling size={26} />, label: 'E-Waste Centers' },
   ];
+
+  const adminNavItems = [
+    { to: '/', icon: <MdDashboard size={26} />, label: 'Dashboard' },
+    { to: '/map', icon: <MdMap size={26} />, label: 'Route Map' },
+    { to: '/efficiency', icon: <MdSpeed size={26} />, label: 'Efficiency' },
+    { to: '/ewaste-centers', icon: <MdRecycling size={26} />, label: 'E-Waste Centers' },
+  ];
+
+  const currentNavItems = role === 'admin' ? adminNavItems : userNavItems;
 
   return (
     <>
@@ -65,17 +72,17 @@ export default function Sidebar({ role, setRole, mobileOpen, setMobileOpen }) {
         <div className="px-5 mt-8 mb-3">
           <p className="text-[11px] font-black text-gray-500 uppercase tracking-[0.2em]">Navigation</p>
         </div>
-        <nav className="px-3 flex flex-col gap-2.5 flex-1 overflow-y-auto mb-6">
-          {navItems.map((item) => (
+        <nav className="px-3 flex flex-col gap-4 flex-1 overflow-y-auto mb-6">
+          {currentNavItems.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
               end={item.to === '/'}
               className={({ isActive }) =>
-                `group relative flex items-center justify-between px-4 py-3.5 rounded-lg font-extrabold text-[13px] uppercase tracking-wide border-2 transition-all ${
+                `group relative flex items-center justify-between px-4 py-3.5 rounded-lg font-extrabold text-[15px] uppercase tracking-wide border-2 transition-all ${
                   isActive 
                     ? 'bg-[#facc15] text-black border-black shadow-[4px_4px_0px_#121212] -translate-y-[2px]' 
-                    : 'bg-transparent text-gray-400 border-transparent hover:bg-white/5 hover:text-white'
+                    : 'bg-transparent text-gray-300 border-transparent hover:bg-white/5 hover:text-white'
                 }`
               }
               onClick={() => setMobileOpen(false)}

@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { getWasteStats, getWasteData, getPickupRequests } from '../services/api';
+import { Link } from 'react-router-dom';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Area, AreaChart
 } from 'recharts';
-import { MdDeleteOutline, MdLocalShipping, MdTrendingUp, MdWarning, MdCheckCircle } from 'react-icons/md';
+import { MdDeleteOutline, MdLocalShipping, MdTrendingUp, MdWarning, MdCheckCircle, MdRecycling } from 'react-icons/md';
 
 const TOOLTIP_STYLE = {
   background: '#fff',
@@ -17,7 +18,7 @@ const TOOLTIP_STYLE = {
 /**
  * Dashboard Page — Overview of waste collection status with metrics and charts
  */
-export default function Dashboard() {
+export default function Dashboard({ role = 'admin' }) {
   const [stats, setStats] = useState(null);
   const [wasteData, setWasteData] = useState([]);
   const [pickups, setPickups] = useState([]);
@@ -92,6 +93,78 @@ export default function Dashboard() {
     { label: 'Pickups', value: pickups.length, icon: <MdLocalShipping size={24} />, bg: '#ec4899' },
   ];
 
+  // --- USER DASHBOARD ---
+  if (role === 'user') {
+    return (
+      <div className="space-y-6 pb-6">
+        <div className="page-header">
+          <div className="page-header-inner">
+            <h1>Welcome to SmartWaste</h1>
+            <p className="page-subtitle">Your personal portal for a cleaner Mumbai environment.</p>
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <h3 className="section-title text-base mt-4 mb-2">Quick Actions</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Link 
+            to="/report-waste" 
+            className="brutalist-card p-6 hover:-translate-y-1 transition-transform flex items-center justify-between group"
+            style={{ background: '#facc15' }}
+          >
+            <div>
+              <h2 className="text-xl font-black uppercase text-black">Report Waste</h2>
+              <p className="text-sm font-bold text-black border-2 border-black inline-block px-2 py-0.5 mt-2 bg-white rounded">Submit Hotspot</p>
+            </div>
+            <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center text-white shadow-[4px_4px_0px_#ffffff] border-2 border-black group-hover:scale-110 transition-transform">
+              <MdDeleteOutline size={32} />
+            </div>
+          </Link>
+          
+          <Link 
+            to="/request-pickup" 
+            className="brutalist-card p-6 hover:-translate-y-1 transition-transform flex items-center justify-between group"
+            style={{ background: '#10b981' }}
+          >
+            <div>
+              <h2 className="text-xl font-black uppercase text-white">Request Pickup</h2>
+              <p className="text-sm font-bold text-black border-2 border-black inline-block px-2 py-0.5 mt-2 bg-white rounded">Schedule Truck</p>
+            </div>
+            <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center text-white shadow-[4px_4px_0px_#ffffff] border-2 border-black group-hover:scale-110 transition-transform">
+              <MdLocalShipping size={32} />
+            </div>
+          </Link>
+        </div>
+
+        {/* Info Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+          <div className="stat-card bg-white">
+            <div className="stat-icon bg-[#ec4899]">
+              <MdTrendingUp size={24} />
+            </div>
+            <p className="stat-value">{stats?.collected || 0}</p>
+            <p className="stat-label">Total Collections Made</p>
+          </div>
+          <Link to="/ewaste-centers" className="stat-card bg-white hover:-translate-y-1 transition-transform cursor-pointer">
+            <div className="stat-icon bg-[#3b82f6]">
+              <MdRecycling size={24} />
+            </div>
+            <p className="stat-value">5</p>
+            <p className="stat-label">E-Waste Centers Nearby</p>
+          </Link>
+          <div className="stat-card bg-[#121212] !text-white !border-gray-800">
+            <div className="stat-icon bg-white !text-black border-0">
+              <MdCheckCircle size={24} />
+            </div>
+            <p className="stat-value text-white">{stats?.collectionRate || 0}%</p>
+            <p className="stat-label text-gray-400">City Efficiency Score</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // --- ADMIN DASHBOARD ---
   return (
     <div className="space-y-6 pb-6">
       {/* Page Header */}
