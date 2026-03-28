@@ -4,7 +4,7 @@ import { requestPickup, getPickupRequests, acceptBid } from '../services/api';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
-import { MdBusiness, MdSavings, MdOutlineLeaderboard, MdTrendingUp, MdCheckCircle } from 'react-icons/md';
+import { MdBusiness, MdSavings, MdOutlineLeaderboard, MdTrendingUp, MdCheckCircle, MdStars, MdCardGiftcard, MdLocalFlorist, MdWorkspacePremium } from 'react-icons/md';
 
 const CHART_TOOLTIP = {
   background: '#ffffff',
@@ -100,19 +100,28 @@ export default function BusinessDashboard() {
       <div>
         <h1 className="page-title">Business Hub</h1>
         <p className="page-subtitle">Manage operations, track sustainability, and optimize waste costs.</p>
+        <div className="mt-4 bg-emerald-50 border border-emerald-100 p-3 rounded-xl flex items-center gap-3 w-fit">
+          <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600">
+            <MdStars size={20} />
+          </div>
+          <div>
+            <p className="text-xs font-black text-emerald-800 uppercase tracking-widest">EcoCoins Reward System</p>
+            <p className="text-xs text-emerald-600 font-medium">Earn 10 EcoCoins for every 1 kg of waste recycled.</p>
+          </div>
+        </div>
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="premium-card p-6 bg-gradient-to-br from-slate-900 to-slate-800 text-white relative overflow-hidden">
           <div className="absolute -right-4 -top-4 opacity-10">
             <MdBusiness size={120} />
           </div>
           <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">Active Plan</p>
-          <p className="text-2xl font-black mb-1">Corporate Premium</p>
-          <p className="text-emerald-400 font-bold mb-4">₹10,000 / month</p>
+          <p className="text-2xl font-black mb-1">Corporate</p>
+          <p className="text-emerald-400 font-bold mb-4">Premium</p>
           <div className="inline-block bg-white/10 px-3 py-1 rounded-full text-xs font-bold text-white border border-white/10 backdrop-blur-sm">
-            Active till Jun 2026
+            Valid till Jun 2026
           </div>
         </div>
 
@@ -136,6 +145,18 @@ export default function BusinessDashboard() {
           </div>
           <p className="text-3xl font-black text-slate-800">{totalVolume} kg</p>
           <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Total Bulk Volume MTD</p>
+        </div>
+
+        <div className="premium-card p-6 bg-gradient-to-br from-amber-50 to-orange-50 relative overflow-hidden group border border-amber-100">
+          <div className="absolute right-0 top-0 p-4 opacity-20 group-hover:scale-110 transition-transform">
+            <MdStars size={80} className="text-amber-500" />
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center mb-4">
+            <MdStars size={20} />
+          </div>
+          <p className="text-3xl font-black text-slate-800">{(totalVolume * 10).toLocaleString()}</p>
+          <p className="text-xs font-bold text-amber-700 uppercase tracking-widest mt-1">EcoCoins Balance</p>
+          <p className="text-[10px] font-bold text-slate-500 mt-2">Ready to redeem!</p>
         </div>
       </div>
 
@@ -316,6 +337,59 @@ export default function BusinessDashboard() {
           ))}
         </div>
       )}
+      {/* Rewards Catalog */}
+      <div className="mt-8">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-black text-slate-800 tracking-tight">EcoCoins Rewards Hub</h3>
+          <span className="text-sm font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-full flex items-center gap-1"><MdStars /> {(totalVolume * 10).toLocaleString()} Coins Available</span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="premium-card p-6 hover:-translate-y-1 transition-transform cursor-pointer border-t-4 border-t-emerald-500 flex flex-col justify-between">
+            <div>
+              <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center mb-4">
+                <MdLocalFlorist size={24} />
+              </div>
+              <h4 className="font-black text-slate-800 text-lg mb-1">Plant 10 Trees</h4>
+              <p className="text-sm text-slate-500 font-medium">We will plant and maintain 10 saplings in your organization's name.</p>
+            </div>
+            <div className="mt-6 flex items-center justify-between">
+              <span className="font-bold text-amber-500 flex items-center gap-1"><MdStars size={18}/> 5,000</span>
+              <button className="px-4 py-2 bg-slate-800 text-white text-xs font-bold rounded-lg hover:bg-slate-700 transition">Redeem</button>
+            </div>
+          </div>
+          
+          <div className="premium-card p-6 hover:-translate-y-1 transition-transform cursor-pointer border-t-4 border-t-blue-500 flex flex-col justify-between">
+            <div>
+              <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-4">
+                <MdCardGiftcard size={24} />
+              </div>
+              <h4 className="font-black text-slate-800 text-lg mb-1">20% Vendor Discount</h4>
+              <p className="text-sm text-slate-500 font-medium">Get a flat 20% discount coupon applied to your next 3 bulk waste pickups.</p>
+            </div>
+            <div className="mt-6 flex items-center justify-between">
+              <span className="font-bold text-amber-500 flex items-center gap-1"><MdStars size={18}/> 10,000</span>
+              <button className="px-4 py-2 bg-slate-800 text-white text-xs font-bold rounded-lg hover:bg-slate-700 transition">Redeem</button>
+            </div>
+          </div>
+
+          <div className="premium-card p-6 hover:-translate-y-1 transition-transform cursor-pointer border-t-4 border-t-indigo-500 flex flex-col justify-between relative overflow-hidden">
+            <div className="absolute top-4 right-4 text-indigo-200">
+              <MdWorkspacePremium size={60} className="opacity-30" />
+            </div>
+            <div>
+              <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center mb-4 relative z-10">
+                <MdWorkspacePremium size={24} />
+              </div>
+              <h4 className="font-black text-slate-800 text-lg mb-1 relative z-10">Platinum Badge</h4>
+              <p className="text-sm text-slate-500 font-medium relative z-10">Unlock the Platinum Sustainability Badge for your corporate profile and PR.</p>
+            </div>
+            <div className="mt-6 flex items-center justify-between relative z-10">
+              <span className="font-bold text-amber-500 flex items-center gap-1"><MdStars size={18}/> 25,000</span>
+              <button className="px-4 py-2 bg-slate-100 text-slate-400 text-xs font-bold rounded-lg cursor-not-allowed">Need more coins</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
