@@ -9,7 +9,8 @@ import {
   MdRestore,
   MdSmartToy,
   MdLogout,
-  MdEco
+  MdEco,
+  MdGrain
 } from 'react-icons/md';
 
 /**
@@ -22,6 +23,7 @@ export default function Sidebar({ currentPath, closeMobile }) {
   const menuItems = isAdmin ? [
     { name: 'Dashboard', path: '/', icon: MdDashboard },
     { name: 'Route Map', path: '/map', icon: MdMap },
+    { name: 'Heatmap', path: '/heatmap', icon: MdGrain },
     { name: 'Efficiency', path: '/efficiency', icon: MdBarChart },
     { name: 'E-Waste Centers', path: '/e-waste', icon: MdRestore },
   ] : [

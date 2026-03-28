@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import ReportWaste from './pages/ReportWaste';
 import RequestPickup from './pages/RequestPickup';
 import MapVisualization from './pages/MapVisualization';
+import Heatmap from './pages/Heatmap';
 import EWasteCenters from './pages/EWasteCenters';
 import Efficiency from './pages/Efficiency';
 import AIChatbot from './pages/AIChatbot';
@@ -33,6 +34,7 @@ export default function App() {
 
           {/* Admin Only Routes */}
           <Route path="/map" element={isAdmin ? <MapVisualization /> : <Navigate to="/" replace />} />
+          <Route path="/heatmap" element={isAdmin ? <Heatmap /> : <Navigate to="/" replace />} />
           <Route path="/efficiency" element={isAdmin ? <Efficiency /> : <Navigate to="/" replace />} />
         </Route>
       </Routes>
