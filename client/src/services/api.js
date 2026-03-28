@@ -89,4 +89,30 @@ export const getPredictions = (targetHour, targetDay) =>
 /** Check if ML service is running */
 export const getMLHealth = () => api.get('/ml-health');
 
+// ============================================================
+// CRM — Admin Customer & Vendor Management
+// ============================================================
+
+/** Get all CRM customers */
+export const getCRMCustomers = (params) => api.get('/crm/customers', { params });
+
+/** Get single customer by ID */
+export const getCRMCustomer = (id) => api.get(`/crm/customers/${id}`);
+
+/** Update customer status/notes */
+export const updateCRMCustomer = (id, data) => api.patch(`/crm/customers/${id}`, data);
+
+/** Get all CRM vendors */
+export const getCRMVendors = (params) => api.get('/crm/vendors', { params });
+
+/** Get single vendor by ID */
+export const getCRMVendor = (id) => api.get(`/crm/vendors/${id}`);
+
+/** Update vendor status/notes */
+export const updateCRMVendor = (id, data) => api.patch(`/crm/vendors/${id}`, data);
+
+/** Get aggregated CRM stats */
+export const getCRMStats = () => api.get('/crm/stats');
+
 export default api;
+

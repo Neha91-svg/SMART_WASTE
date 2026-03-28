@@ -242,32 +242,74 @@ export default function BusinessDashboard() {
               </div>
               
               <div className="mt-4 pt-4 border-t border-slate-100">
-                <h5 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3">Vendor Bids ({req.bids?.length || 0})</h5>
-                {req.bids?.length === 0 ? (
-                  <p className="text-xs text-slate-500 italic">Waiting for vendors to bid...</p>
-                ) : (
-                  <div className="space-y-2">
-                    {req.bids.map(bid => (
-                      <div key={bid._id} className={`flex justify-between items-center p-2 rounded-lg border ${bid.status === 'Accepted' ? 'border-emerald-200 bg-emerald-50' : 'border-slate-100 bg-slate-50'}`}>
-                        <div>
-                          <p className="text-sm font-bold text-slate-800">{bid.vendorName}</p>
-                          <p className="text-emerald-600 font-bold text-sm">₹{bid.amount}</p>
-                        </div>
-                        {req.status === 'Pending' ? (
-                          <button
-                            onClick={() => handleAcceptBid(req._id, bid._id)}
-                            className="px-3 py-1.5 bg-slate-800 text-white text-xs font-bold rounded-md hover:bg-slate-700 transition"
-                          >
-                            Accept
-                          </button>
-                        ) : (
-                          <div className="text-xs font-bold text-slate-400 flex items-center gap-1">
-                            {bid.status === 'Accepted' ? <span className="text-emerald-600"><MdCheckCircle /> Accepted</span> : bid.status}
+                {req.status === 'Pending' ? (
+                  <>
+                    <h5 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3">Vendor Bids ({req.bids?.length || 0})</h5>
+                    {req.bids?.length === 0 ? (
+                      <p className="text-xs text-slate-500 italic">Waiting for vendors to bid...</p>
+                    ) : (
+                      <div className="space-y-2">
+                        {req.bids.map(bid => (
+                          <div key={bid._id} className="flex justify-between items-center p-2 rounded-lg border border-slate-100 bg-slate-50">
+                            <div>
+                              <p className="text-sm font-bold text-slate-800">{bid.vendorName}</p>
+                              <p className="text-emerald-600 font-bold text-sm">₹{bid.amount}</p>
+                            </div>
+                            <button
+                              onClick={() => handleAcceptBid(req._id, bid._id)}
+                              className="px-3 py-1.5 bg-slate-800 text-white text-xs font-bold rounded-md hover:bg-slate-700 transition"
+                            >
+                              Accept
+                            </button>
                           </div>
-                        )}
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <h5 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4">Job Tracking</h5>
+                    <div className="relative">
+                      {/* Timeline Line */}
+                      <div className="absolute left-3.5 top-2 bottom-2 w-0.5 bg-slate-100"></div>
+                      
+                      {/* Step 1: Accepted */}
+                      <div className="flex gap-4 mb-4 relative z-10">
+                        <div className="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-sm border-[3px] border-white">
+                          <MdCheckCircle size={14} />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-slate-800">Bid Accepted</p>
+                          <p className="text-[10px] font-bold text-slate-400 mt-0.5">Assigned to: <span className="text-emerald-600 font-black">{req.assignedVendor}</span></p>
+                          {req.bids?.filter(b => b.status === 'Accepted').map(b => (
+                            <p key={b._id} className="text-[10px] text-slate-500 font-semibold mt-0.5">Agreed Price: ₹{b.amount}</p>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Step 2: Scheduled/In-Transit */}
+                      <div className="flex gap-4 mb-4 relative z-10">
+                        <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 shadow-sm border-[3px] border-white ${req.status === 'Scheduled' || req.status === 'Completed' ? 'bg-blue-500 text-white' : 'bg-slate-200 text-slate-400'}`}>
+                          <div className={`w-2.5 h-2.5 rounded-full ${req.status === 'Scheduled' || req.status === 'Completed' ? 'bg-white' : 'bg-slate-400'}`}></div>
+                        </div>
+                        <div>
+                          <p className={`text-xs font-bold ${req.status === 'Scheduled' || req.status === 'Completed' ? 'text-slate-800' : 'text-slate-400'}`}>Scheduled for Pickup</p>
+                          <p className="text-[10px] text-slate-400 font-semibold mt-0.5">Vendor has been notified to arrive at {req.preferredTime}</p>
+                        </div>
+                      </div>
+
+                      {/* Step 3: Completed */}
+                      <div className="flex gap-4 relative z-10">
+                        <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 shadow-sm border-[3px] border-white ${req.status === 'Completed' ? 'bg-emerald-500 text-white' : 'bg-slate-200 text-slate-400'}`}>
+                          <MdCheckCircle size={14} />
+                        </div>
+                        <div>
+                          <p className={`text-xs font-bold ${req.status === 'Completed' ? 'text-slate-800' : 'text-slate-400'}`}>Completed</p>
+                          {req.status === 'Completed' && <p className="text-[10px] text-emerald-600 font-bold mt-0.5">Waste has been successfully safely disposed.</p>}
+                        </div>
+                      </div>
+                    </div>
+                  </>
                 )}
               </div>
             </div>

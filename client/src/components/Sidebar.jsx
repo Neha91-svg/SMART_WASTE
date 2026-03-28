@@ -12,7 +12,9 @@ import {
   MdEco,
   MdGrain,
   MdBusinessCenter,
-  MdStorefront
+  MdStorefront,
+  MdExplore,
+  MdPeople
 } from 'react-icons/md';
 
 /**
@@ -26,6 +28,8 @@ export default function Sidebar({ currentPath, closeMobile }) {
       case 'Admin':
         return [
           { name: 'Dashboard', path: '/', icon: MdDashboard },
+          { name: 'Job Tracker', path: '/tracker', icon: MdExplore },
+          { name: 'CRM', path: '/crm', icon: MdPeople },
           { name: 'Route Map', path: '/map', icon: MdMap },
           { name: 'Heatmap', path: '/heatmap', icon: MdGrain },
           { name: 'Efficiency', path: '/efficiency', icon: MdBarChart },

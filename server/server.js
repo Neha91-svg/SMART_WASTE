@@ -17,6 +17,7 @@ const ewasteRoutes = require('./routes/ewaste');
 const routeRoutes = require('./routes/route');
 const chatRoutes = require('./routes/chat');
 const predictionRoutes = require('./routes/prediction');
+const crmRoutes = require('./routes/crm');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -42,6 +43,7 @@ app.use('/api', ewasteRoutes);
 app.use('/api', routeRoutes);
 app.use('/api', chatRoutes);
 app.use('/api', predictionRoutes);
+app.use('/api', crmRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -85,7 +87,10 @@ async function startServer() {
       console.log(`   GET  /api/ewaste-centers`);
       console.log(`   POST /api/optimize-route`);
       console.log(`   POST /api/predict-heatmap`);
-      console.log(`   GET  /api/ml-health\n`);
+      console.log(`   GET  /api/ml-health`);
+      console.log(`   GET  /api/crm/customers`);
+      console.log(`   GET  /api/crm/vendors`);
+      console.log(`   GET  /api/crm/stats\n`);
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error.message);

@@ -11,6 +11,8 @@ import Efficiency from './pages/Efficiency';
 import AIChatbot from './pages/AIChatbot';
 import BusinessDashboard from './pages/BusinessDashboard';
 import VendorDashboard from './pages/VendorDashboard';
+import AdminTracker from './pages/AdminTracker';
+import AdminCRM from './pages/AdminCRM';
 import './index.css';
 
 /**
@@ -40,6 +42,8 @@ export default function App() {
           <Route path="/ai-chat" element={isUser || isBusiness ? <AIChatbot /> : <Navigate to="/" replace />} />
 
           {/* Admin Only Routes */}
+          <Route path="/tracker" element={isAdmin ? <AdminTracker /> : <Navigate to="/" replace />} />
+          <Route path="/crm" element={isAdmin ? <AdminCRM /> : <Navigate to="/" replace />} />
           <Route path="/map" element={isAdmin ? <MapVisualization /> : <Navigate to="/" replace />} />
           <Route path="/heatmap" element={isAdmin ? <Heatmap /> : <Navigate to="/" replace />} />
           <Route path="/efficiency" element={isAdmin ? <Efficiency /> : <Navigate to="/" replace />} />
