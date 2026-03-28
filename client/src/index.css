@@ -1,28 +1,39 @@
 @import "tailwindcss";
 
 /* ============================================================
-   CUSTOM CSS FOR SMART WASTE COLLECTION APP
+   SMARTWASTE — PROFESSIONAL DESIGN SYSTEM
+   Clean, minimal, user-centric design with emerald green accent
    ============================================================ */
 
 :root {
-  --primary: #facc15;
-  --primary-dark: #eab308;
-  --secondary: #06b6d4;
-  --accent: #facc15;
-  --danger: #ef4444;
-  
-  --bg-dark: #121212;
-  --bg-sidebar: #1a1a1a;
-  --bg-card: #ffffff;
-  --bg-card-hover: #fafafa;
-  --bg-light: #fefce8;
-  
-  --text-primary: #121212;
-  --text-secondary: #475569;
-  --text-inverse: #f8fafc;
-  --border: #121212;
+  --primary: #059669;
+  --primary-light: #d1fae5;
+  --primary-dark: #047857;
+  --primary-50: #ecfdf5;
 
-  --sidebar-width: 240px;
+  --bg-page: #f8fafc;
+  --bg-sidebar: #0f172a;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f8fafc;
+
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --text-inverse: #f1f5f9;
+
+  --border: #e2e8f0;
+  --border-dark: #cbd5e1;
+
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --info: #3b82f6;
+
+  --sidebar-width: 260px;
+  --radius: 12px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
 }
 
 * {
@@ -32,132 +43,116 @@
 }
 
 body {
-  font-family: 'Space Grotesk', 'Inter', sans-serif;
-  background: var(--bg-light);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-page);
   color: var(--text-primary);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 14px;
+  line-height: 1.6;
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: #94a3b8;
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #64748b;
-}
-
-/* Leaflet map fix */
-.leaflet-container {
-  background: #e2e8f0;
-  border-radius: 0;
-  z-index: 1;
-  font-family: inherit;
-  border: 3px solid var(--border);
-  box-shadow: 4px 4px 0px var(--border);
-}
-
-.leaflet-popup-content-wrapper {
-  background: var(--bg-card);
-  color: var(--text-primary);
-  border: 3px solid var(--border);
-  border-radius: 4px;
-  box-shadow: 4px 4px 0px var(--border);
-}
-
-.leaflet-popup-tip {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-}
-
-.leaflet-popup-content {
-  margin: 12px;
-  font-weight: 600;
-}
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
 /* ============================================================
-   BRUTALIST DESIGN SYSTEM
+   CARD SYSTEM
    ============================================================ */
 
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow);
+}
+
+/* Legacy class mapping for backward compat */
 .brutalist-card {
   background: var(--bg-card);
-  border: 3px solid var(--border);
-  border-radius: 8px;
-  box-shadow: 5px 5px 0px var(--border);
-  transition: all 0.2s ease;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
   overflow: hidden;
 }
 
-/* Page Header Block */
+.brutalist-card:hover {
+  box-shadow: var(--shadow);
+}
+
+/* ============================================================
+   PAGE HEADER
+   ============================================================ */
+
 .page-header {
-  background: var(--primary);
-  border: 3px solid var(--border);
-  border-radius: 8px;
-  box-shadow: 5px 5px 0px var(--border);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--primary);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
   margin-bottom: 1.5rem;
 }
 
 .page-header .page-header-inner {
-  padding: 1.75rem 1.5rem;
+  padding: 1.5rem;
 }
 
 @media (min-width: 768px) {
   .page-header .page-header-inner {
-    padding: 2.25rem 2rem;
+    padding: 1.75rem 2rem;
   }
 }
 
 .page-header h1 {
-  font-size: 2rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: -0.5px;
-  line-height: 1.1;
-  margin-bottom: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
   color: var(--text-primary);
 }
 
 @media (min-width: 768px) {
   .page-header h1 {
-    font-size: 2.75rem;
+    font-size: 1.75rem;
   }
 }
 
 .page-header .page-subtitle {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: #374151;
-  background: white;
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border: 2px solid var(--border);
-  border-radius: 4px;
-  box-shadow: 2px 2px 0px var(--border);
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
 }
 
-/* Section Header */
+/* ============================================================
+   SECTION TITLES
+   ============================================================ */
+
 .section-title {
-  font-size: 0.875rem;
-  font-weight: 800;
+  font-size: 0.75rem;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--text-primary);
-  border-bottom: 3px solid var(--border);
+  color: var(--text-secondary);
   padding-bottom: 0.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
 }
 
-/* Brutalist Table */
+/* ============================================================
+   TABLES
+   ============================================================ */
+
 .brutalist-table {
   width: 100%;
   border-collapse: separate;
@@ -165,42 +160,42 @@ body {
 }
 
 .brutalist-table th {
-  background: #fdf6cd;
-  border-bottom: 3px solid var(--border);
-  padding: 12px 16px;
-  font-weight: 700;
+  background: var(--primary-50);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  font-weight: 600;
   text-transform: uppercase;
   font-size: 11px;
   text-align: left;
   letter-spacing: 0.5px;
+  color: var(--text-secondary);
   white-space: nowrap;
 }
 
 .brutalist-table td {
-  border-bottom: 1px solid #e2e8f0;
-  padding: 12px 16px;
-  font-size: 14px;
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  font-size: 13px;
   font-weight: 500;
-  background: #fff;
+  background: var(--bg-card);
   vertical-align: middle;
-}
-
-.brutalist-table tr:last-child td {
-  border-bottom: none;
-}
-
-.brutalist-table tr:hover td {
-  background: #fefce8;
-}
-
-/* Form inputs */
-.form-input {
-  background: #fff;
-  border: 3px solid var(--border);
-  border-radius: 6px;
-  padding: 12px 16px;
   color: var(--text-primary);
-  font-size: 15px;
+}
+
+.brutalist-table tr:last-child td { border-bottom: none; }
+.brutalist-table tr:hover td { background: var(--primary-50); }
+
+/* ============================================================
+   FORM INPUTS
+   ============================================================ */
+
+.form-input {
+  background: var(--bg-card);
+  border: 1px solid var(--border-dark);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-size: 14px;
   font-weight: 500;
   width: 100%;
   transition: all 0.2s ease;
@@ -209,88 +204,90 @@ body {
 }
 
 .form-input:focus {
-  background: #fefce8;
-  box-shadow: 4px 4px 0px var(--border);
-  transform: translate(-2px, -2px);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
 }
 
 .form-input::placeholder {
-  color: var(--text-secondary);
+  color: var(--text-muted);
   font-weight: 400;
 }
 
-/* Button styles */
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
 .btn-primary {
   background: var(--primary);
-  color: var(--text-primary);
+  color: white;
   padding: 10px 20px;
-  border-radius: 6px;
-  font-weight: 700;
-  font-size: 15px;
-  border: 3px solid var(--border);
-  box-shadow: 4px 4px 0px var(--border);
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
   cursor: pointer;
-  transition: all 0.1s ease;
+  transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   font-family: inherit;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-primary:hover {
   background: var(--primary-dark);
-  transform: translate(-1px, -1px);
-  box-shadow: 5px 5px 0px var(--border);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 .btn-primary:active {
-  transform: translate(3px, 3px);
-  box-shadow: 1px 1px 0px var(--border);
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-primary:disabled {
   background: #e2e8f0;
   color: #94a3b8;
-  border-color: #94a3b8;
   box-shadow: none;
   cursor: not-allowed;
   transform: none;
 }
 
-/* Badge variants */
+/* ============================================================
+   BADGES
+   ============================================================ */
+
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: 3px 10px;
-  border-radius: 4px;
+  padding: 2px 8px;
+  border-radius: 6px;
   font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  border: 2px solid var(--border);
-  background: #fff;
-  letter-spacing: 0.5px;
+  font-weight: 600;
+  letter-spacing: 0.025em;
   white-space: nowrap;
 }
 
-.badge-high { background: #fee2e2; }
-.badge-medium { background: #fef3c7; }
-.badge-low { background: #d1fae5; }
-.badge-pending { background: #fef3c7; }
-.badge-progress { background: #e0f2fe; }
-.badge-collected { background: #d1fae5; }
+.badge-high { background: #fef2f2; color: #dc2626; }
+.badge-medium { background: #fffbeb; color: #d97706; }
+.badge-low { background: #ecfdf5; color: #059669; }
+.badge-pending { background: #fffbeb; color: #d97706; }
+.badge-progress { background: #eff6ff; color: #2563eb; }
+.badge-collected { background: #ecfdf5; color: #059669; }
 
-/* Toggle Button Group */
+/* ============================================================
+   TOGGLE BUTTONS
+   ============================================================ */
+
 .toggle-btn {
   flex: 1;
-  padding: 0.75rem;
-  border-radius: 6px;
-  font-size: 0.875rem;
-  font-weight: 700;
+  padding: 0.625rem;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
   transition: all 0.15s ease;
-  border: 3px solid #cbd5e1;
+  border: 1px solid var(--border-dark);
   background: white;
   color: var(--text-secondary);
   cursor: pointer;
@@ -299,62 +296,68 @@ body {
 }
 
 .toggle-btn:hover {
-  border-color: var(--border);
-  box-shadow: 3px 3px 0px var(--border);
+  border-color: var(--primary);
+  color: var(--primary);
 }
 
 .toggle-btn.active {
-  border-color: var(--border);
-  box-shadow: 3px 3px 0px var(--border);
+  border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary-dark);
 }
 
-/* Stat Card */
+/* ============================================================
+   STAT CARDS
+   ============================================================ */
+
 .stat-card {
   background: var(--bg-card);
-  border: 3px solid var(--border);
-  border-radius: 8px;
-  box-shadow: 5px 5px 0px var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
 }
 
 .stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 6px 8px 0px var(--border);
+  box-shadow: var(--shadow);
+  transform: translateY(-1px);
 }
 
 .stat-card .stat-icon {
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 6px;
-  border: 2px solid var(--border);
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: black;
+  color: white;
   margin-bottom: 0.75rem;
-  box-shadow: 2px 2px 0px var(--border);
 }
 
 .stat-card .stat-value {
-  font-size: 1.75rem;
-  font-weight: 800;
+  font-size: 1.5rem;
+  font-weight: 700;
   line-height: 1;
   margin-bottom: 0.25rem;
+  color: var(--text-primary);
 }
 
 .stat-card .stat-label {
-  font-size: 0.7rem;
-  font-weight: 700;
+  font-size: 0.6875rem;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #6b7280;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
   margin-top: auto;
 }
 
-/* Loading Spinner */
+/* ============================================================
+   LOADING
+   ============================================================ */
+
 .loading-container {
   display: flex;
   align-items: center;
@@ -363,9 +366,9 @@ body {
 }
 
 .spinner {
-  width: 3rem;
-  height: 3rem;
-  border: 4px solid var(--border);
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid var(--border);
   border-top-color: var(--primary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
@@ -376,41 +379,58 @@ body {
   to { transform: rotate(360deg); }
 }
 
-/* Success Alert */
+/* ============================================================
+   SUCCESS ALERT
+   ============================================================ */
+
 .success-alert {
-  background: #d1fae5;
-  border: 3px solid #10b981;
-  border-radius: 8px;
-  box-shadow: 4px 4px 0px #065f46;
+  background: var(--primary-light);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius);
   padding: 1rem 1.5rem;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
   margin-bottom: 1.5rem;
 }
 
 .success-alert .alert-title {
-  font-weight: 800;
-  font-size: 1rem;
-  color: #065f46;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--primary-dark);
 }
 
 .success-alert .alert-text {
   font-weight: 500;
-  color: #065f46;
-  font-size: 0.875rem;
+  color: var(--primary-dark);
+  font-size: 0.8125rem;
 }
 
-/* Recharts overrides */
+/* ============================================================
+   RECHARTS OVERRIDES
+   ============================================================ */
+
 .recharts-cartesian-grid-vertical line,
 .recharts-cartesian-grid-horizontal line {
-  stroke: #e2e8f0;
+  stroke: var(--border);
 }
 
 .recharts-text {
-  fill: #121212;
-  font-weight: 600;
-  font-family: 'Space Grotesk', sans-serif;
+  fill: var(--text-secondary);
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+}
+
+/* ============================================================
+   LEAFLET (deprecated but kept for safety)
+   ============================================================ */
+
+.leaflet-container {
+  background: #e2e8f0;
+  border-radius: var(--radius);
+  z-index: 1;
+  font-family: inherit;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
 }

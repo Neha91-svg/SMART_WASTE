@@ -9,21 +9,12 @@ const mapContainerStyle = {
   minHeight: '520px'
 };
 
-const center = {
-  lat: 19.076,
-  lng: 72.8777
-};
+const center = { lat: 19.076, lng: 72.8777 };
 
 const options = {
   disableDefaultUI: true,
   zoomControl: true,
-  styles: [
-    {
-      featureType: "poi",
-      elementType: "labels",
-      stylers: [{ visibility: "off" }]
-    }
-  ]
+  styles: [{ featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] }]
 };
 
 const libraries = ['places'];
@@ -46,43 +37,24 @@ export default function ReportWaste() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!location) {
-      alert('Please select a location on the map');
-      return;
-    }
-
+    if (!location) { alert('Please select a location on the map'); return; }
     setSubmitting(true);
     try {
       await reportWaste({ location, address, wasteLevel, wasteType });
       setSuccess(true);
-      setTimeout(() => {
-        setSuccess(false);
-        setLocation(null);
-        setAddress('');
-        setWasteLevel('Medium');
-        setWasteType('General');
-      }, 3000);
-    } catch (err) {
-      alert('Failed to submit report. Please try again.');
-      console.error(err);
-    } finally {
-      setSubmitting(false);
-    }
+      setTimeout(() => { setSuccess(false); setLocation(null); setAddress(''); setWasteLevel('Medium'); setWasteType('General'); }, 3000);
+    } catch (err) { alert('Failed to submit report.'); console.error(err); }
+    finally { setSubmitting(false); }
   };
 
-  const levelColors = { High: '#ef4444', Medium: '#facc15', Low: '#10b981' };
-  const levelEmojis = { High: '🔴', Medium: '🟡', Low: '🟢' };
+  const levelColors = { High: '#ef4444', Medium: '#f59e0b', Low: '#059669' };
 
   const onMapClick = (e) => {
-    setLocation({
-      lat: e.latLng.lat(),
-      lng: e.latLng.lng()
-    });
+    setLocation({ lat: e.latLng.lat(), lng: e.latLng.lng() });
   };
 
   return (
     <div className="space-y-6 pb-6">
-      {/* Page Header */}
       <div className="page-header">
         <div className="page-header-inner">
           <h1>Report Waste</h1>
@@ -90,96 +62,79 @@ export default function ReportWaste() {
         </div>
       </div>
 
-      {/* Success Message */}
       {success && (
         <div className="success-alert">
-          <MdCheckCircle size={28} className="text-[#10b981] shrink-0" />
+          <MdCheckCircle size={24} className="text-emerald-600 shrink-0" />
           <div>
-            <p className="alert-title">Waste report submitted successfully!</p>
+            <p className="alert-title">Report submitted successfully!</p>
             <p className="alert-text">Thank you for helping keep Mumbai clean.</p>
           </div>
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-        {/* Map — 3 cols */}
-        <div className="lg:col-span-3 brutalist-card bg-white overflow-hidden relative" style={{ minHeight: '520px' }}>
-          {loadError && <div className="p-5 font-bold text-red-500">Error loading maps. Check API Key.</div>}
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
+        {/* Map */}
+        <div className="lg:col-span-3 card overflow-hidden" style={{ minHeight: '520px' }}>
+          {loadError && <div className="p-5 text-red-500 text-sm font-medium">Error loading maps. Check API key.</div>}
           {!isLoaded ? (
-            <div className="flex items-center justify-center p-10 h-full w-full bg-gray-100">
-               <div className="spinner"></div>
-            </div>
+            <div className="flex items-center justify-center p-10 h-full"><div className="spinner"></div></div>
           ) : (
-            <GoogleMap
-              mapContainerStyle={mapContainerStyle}
-              zoom={12}
-              center={center}
-              options={options}
-              onClick={onMapClick}
-            >
+            <GoogleMap mapContainerStyle={mapContainerStyle} zoom={12} center={center} options={options} onClick={onMapClick}>
               {location && <Marker position={location} />}
             </GoogleMap>
           )}
         </div>
 
-        {/* Form — 2 cols */}
+        {/* Form */}
         <div className="lg:col-span-2">
-          <form onSubmit={handleSubmit} className="brutalist-card bg-white p-5 md:p-6 space-y-5">
+          <form onSubmit={handleSubmit} className="card p-5 md:p-6 space-y-5">
             <h3 className="section-title flex items-center gap-2 !mb-4">
-              <MdLocationOn className="text-[#10b981]" size={24} /> Waste Details
+              <MdLocationOn className="text-emerald-500" size={20} /> Waste Details
             </h3>
 
-            {/* Selected coordinates */}
             <div>
-              <label className="block text-xs text-[#121212] mb-1.5 font-bold uppercase tracking-wide">Selected Location *</label>
-              <div className="form-input shadow-[3px_3px_0px_#121212] bg-[#f8fafc]">
+              <label className="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wider">Selected Location *</label>
+              <div className="form-input bg-slate-50">
                 {location ? (
-                  <span className="text-[#10b981] font-bold text-sm">
+                  <span className="text-emerald-600 font-semibold text-sm">
                     📍 {location.lat.toFixed(5)}, {location.lng.toFixed(5)}
                   </span>
                 ) : (
-                  <span className="text-[#94a3b8] font-medium text-sm">Click on the map to select...</span>
+                  <span className="text-slate-400 text-sm">Click on the map to select...</span>
                 )}
               </div>
             </div>
 
-            {/* Address */}
             <div>
-              <label className="block text-xs text-[#121212] mb-1.5 font-bold uppercase tracking-wide">Address / Landmark</label>
+              <label className="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wider">Address / Landmark</label>
               <input
                 type="text"
-                className="form-input shadow-[3px_3px_0px_#121212]"
+                className="form-input"
                 placeholder="e.g., Near Bandra Station, Mumbai"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
               />
             </div>
 
-            {/* Waste Level */}
             <div>
-              <label className="block text-xs text-[#121212] mb-2 font-bold uppercase tracking-wide">Waste Level</label>
+              <label className="block text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">Waste Level</label>
               <div className="flex gap-2">
                 {['Low', 'Medium', 'High'].map((level) => (
                   <button
                     key={level}
                     type="button"
                     onClick={() => setWasteLevel(level)}
-                    className={`toggle-btn ${
-                      wasteLevel === level
-                        ? `active text-${level === 'High' ? 'white' : 'black'}`
-                        : ''
-                    }`}
-                    style={wasteLevel === level ? { background: levelColors[level], borderColor: '#121212', color: level === 'High' ? 'white' : 'black' } : {}}
+                    className={`toggle-btn ${wasteLevel === level ? 'active' : ''}`}
+                    style={wasteLevel === level ? { background: levelColors[level], borderColor: levelColors[level], color: 'white' } : {}}
                   >
-                    {levelEmojis[level]} {level}
+                    {level}
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Waste Type */}
             <div>
-              <label className="block text-xs text-[#121212] mb-2 font-bold uppercase tracking-wide">Waste Type</label>
+              <label className="block text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">Waste Type</label>
               <div className="flex gap-2">
                 {['General', 'E-waste'].map((type) => (
                   <button
@@ -187,7 +142,6 @@ export default function ReportWaste() {
                     type="button"
                     onClick={() => setWasteType(type)}
                     className={`toggle-btn ${wasteType === type ? 'active' : ''}`}
-                    style={wasteType === type ? { background: '#06b6d4', borderColor: '#121212', color: 'white' } : {}}
                   >
                     {type === 'General' ? '🗑️' : '🔌'} {type}
                   </button>
@@ -195,21 +149,14 @@ export default function ReportWaste() {
               </div>
             </div>
 
-            {/* Submit */}
-            <button
-              type="submit"
-              disabled={submitting || !location}
-              className="btn-primary w-full py-3.5 text-base mt-2"
-            >
+            <button type="submit" disabled={submitting || !location} className="btn-primary w-full py-3 text-sm mt-2">
               {submitting ? (
                 <span className="flex items-center gap-2">
-                  <div className="w-5 h-5 border-[3px] border-black border-t-transparent rounded-full animate-spin"></div>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                   Submitting...
                 </span>
               ) : (
-                <span className="flex items-center gap-2">
-                  <MdSend size={20} /> Submit Report
-                </span>
+                <span className="flex items-center gap-2"><MdSend size={18} /> Submit Report</span>
               )}
             </button>
           </form>

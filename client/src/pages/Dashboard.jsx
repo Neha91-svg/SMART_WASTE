@@ -5,18 +5,19 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Area, AreaChart
 } from 'recharts';
-import { MdDeleteOutline, MdLocalShipping, MdTrendingUp, MdWarning, MdCheckCircle, MdRecycling } from 'react-icons/md';
+import { MdDeleteOutline, MdLocalShipping, MdTrendingUp, MdWarning, MdCheckCircle, MdRecycling, MdArrowForward } from 'react-icons/md';
 
 const TOOLTIP_STYLE = {
   background: '#fff',
-  border: '3px solid #121212',
-  borderRadius: '4px',
-  fontWeight: 'bold',
-  boxShadow: '4px 4px 0px #121212',
+  border: '1px solid #e2e8f0',
+  borderRadius: '8px',
+  fontWeight: '500',
+  boxShadow: '0 4px 6px rgba(0,0,0,0.07)',
+  fontSize: '13px',
 };
 
 /**
- * Dashboard Page — Overview of waste collection status with metrics and charts
+ * Dashboard Page — Clean analytics overview
  */
 export default function Dashboard({ role = 'admin' }) {
   const [stats, setStats] = useState(null);
@@ -48,9 +49,9 @@ export default function Dashboard({ role = 'admin' }) {
   if (loading) {
     return (
       <div className="loading-container">
-        <div className="text-center font-bold text-lg">
+        <div className="text-center">
           <div className="spinner"></div>
-          <p>Loading dashboard...</p>
+          <p className="text-slate-500 text-sm font-medium">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -59,14 +60,14 @@ export default function Dashboard({ role = 'admin' }) {
   // Chart data
   const wasteLevelData = [
     { name: 'High', value: wasteData.filter(w => w.wasteLevel === 'High').length, color: '#ef4444' },
-    { name: 'Medium', value: wasteData.filter(w => w.wasteLevel === 'Medium').length, color: '#facc15' },
-    { name: 'Low', value: wasteData.filter(w => w.wasteLevel === 'Low').length, color: '#10b981' },
+    { name: 'Medium', value: wasteData.filter(w => w.wasteLevel === 'Medium').length, color: '#f59e0b' },
+    { name: 'Low', value: wasteData.filter(w => w.wasteLevel === 'Low').length, color: '#059669' },
   ];
 
   const statusData = [
-    { name: 'Pending', value: stats?.pending || 0, color: '#facc15' },
-    { name: 'In Progress', value: stats?.inProgress || 0, color: '#06b6d4' },
-    { name: 'Collected', value: stats?.collected || 0, color: '#10b981' },
+    { name: 'Pending', value: stats?.pending || 0, color: '#f59e0b' },
+    { name: 'In Progress', value: stats?.inProgress || 0, color: '#3b82f6' },
+    { name: 'Collected', value: stats?.collected || 0, color: '#059669' },
   ];
 
   const wasteTypeData = [
@@ -85,19 +86,19 @@ export default function Dashboard({ role = 'admin' }) {
   ];
 
   const statCards = [
-    { label: 'Total Reports', value: stats?.total || 0, icon: <MdDeleteOutline size={24} />, bg: '#10b981' },
-    { label: 'Pending', value: stats?.pending || 0, icon: <MdWarning size={24} />, bg: '#facc15' },
-    { label: 'Collected', value: stats?.collected || 0, icon: <MdCheckCircle size={24} />, bg: '#06b6d4' },
-    { label: 'Collection Rate', value: `${stats?.collectionRate || 0}%`, icon: <MdTrendingUp size={24} />, bg: '#a855f7' },
-    { label: 'High Priority', value: stats?.highPriority || 0, icon: <MdDeleteOutline size={24} />, bg: '#ef4444' },
-    { label: 'Pickups', value: pickups.length, icon: <MdLocalShipping size={24} />, bg: '#ec4899' },
+    { label: 'Total Reports', value: stats?.total || 0, icon: <MdDeleteOutline size={20} />, bg: '#059669' },
+    { label: 'Pending', value: stats?.pending || 0, icon: <MdWarning size={20} />, bg: '#f59e0b' },
+    { label: 'Collected', value: stats?.collected || 0, icon: <MdCheckCircle size={20} />, bg: '#3b82f6' },
+    { label: 'Collection Rate', value: `${stats?.collectionRate || 0}%`, icon: <MdTrendingUp size={20} />, bg: '#8b5cf6' },
+    { label: 'High Priority', value: stats?.highPriority || 0, icon: <MdDeleteOutline size={20} />, bg: '#ef4444' },
+    { label: 'Pickups', value: pickups.length, icon: <MdLocalShipping size={20} />, bg: '#06b6d4' },
   ];
 
   // --- USER DASHBOARD ---
   if (role === 'user') {
     return (
       <div className="space-y-6 pb-6">
-        <div className="page-header">
+        <div className="page-header" style={{ borderLeftColor: '#059669' }}>
           <div className="page-header-inner">
             <h1>Welcome to SmartWaste</h1>
             <p className="page-subtitle">Your personal portal for a cleaner Mumbai environment.</p>
@@ -105,59 +106,57 @@ export default function Dashboard({ role = 'admin' }) {
         </div>
 
         {/* Quick Actions */}
-        <h3 className="section-title text-base mt-4 mb-2">Quick Actions</h3>
+        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Quick Actions</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Link 
             to="/report-waste" 
-            className="brutalist-card p-6 hover:-translate-y-1 transition-transform flex items-center justify-between group"
-            style={{ background: '#facc15' }}
+            className="group card p-5 flex items-center justify-between hover:shadow-md hover:-translate-y-0.5 transition-all"
           >
             <div>
-              <h2 className="text-xl font-black uppercase text-black">Report Waste</h2>
-              <p className="text-sm font-bold text-black border-2 border-black inline-block px-2 py-0.5 mt-2 bg-white rounded">Submit Hotspot</p>
+              <h2 className="text-base font-bold text-slate-800">Report Waste</h2>
+              <p className="text-sm text-slate-500 mt-1">Submit a new waste hotspot</p>
             </div>
-            <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center text-white shadow-[4px_4px_0px_#ffffff] border-2 border-black group-hover:scale-110 transition-transform">
-              <MdDeleteOutline size={32} />
+            <div className="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center text-white group-hover:scale-110 transition-transform">
+              <MdDeleteOutline size={22} />
             </div>
           </Link>
           
           <Link 
             to="/request-pickup" 
-            className="brutalist-card p-6 hover:-translate-y-1 transition-transform flex items-center justify-between group"
-            style={{ background: '#10b981' }}
+            className="group card p-5 flex items-center justify-between hover:shadow-md hover:-translate-y-0.5 transition-all"
           >
             <div>
-              <h2 className="text-xl font-black uppercase text-white">Request Pickup</h2>
-              <p className="text-sm font-bold text-black border-2 border-black inline-block px-2 py-0.5 mt-2 bg-white rounded">Schedule Truck</p>
+              <h2 className="text-base font-bold text-slate-800">Request Pickup</h2>
+              <p className="text-sm text-slate-500 mt-1">Schedule a truck collection</p>
             </div>
-            <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center text-white shadow-[4px_4px_0px_#ffffff] border-2 border-black group-hover:scale-110 transition-transform">
-              <MdLocalShipping size={32} />
+            <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center text-white group-hover:scale-110 transition-transform">
+              <MdLocalShipping size={22} />
             </div>
           </Link>
         </div>
 
         {/* Info Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-          <div className="stat-card bg-white">
-            <div className="stat-icon bg-[#ec4899]">
-              <MdTrendingUp size={24} />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+          <div className="stat-card">
+            <div className="stat-icon" style={{ background: '#059669' }}>
+              <MdTrendingUp size={20} />
             </div>
             <p className="stat-value">{stats?.collected || 0}</p>
-            <p className="stat-label">Total Collections Made</p>
+            <p className="stat-label">Total Collections</p>
           </div>
-          <Link to="/ewaste-centers" className="stat-card bg-white hover:-translate-y-1 transition-transform cursor-pointer">
-            <div className="stat-icon bg-[#3b82f6]">
-              <MdRecycling size={24} />
+          <Link to="/ewaste-centers" className="stat-card hover:-translate-y-0.5 cursor-pointer">
+            <div className="stat-icon" style={{ background: '#3b82f6' }}>
+              <MdRecycling size={20} />
             </div>
             <p className="stat-value">5</p>
-            <p className="stat-label">E-Waste Centers Nearby</p>
+            <p className="stat-label">E-Waste Centers</p>
           </Link>
-          <div className="stat-card bg-[#121212] !text-white !border-gray-800">
-            <div className="stat-icon bg-white !text-black border-0">
-              <MdCheckCircle size={24} />
+          <div className="stat-card">
+            <div className="stat-icon" style={{ background: '#8b5cf6' }}>
+              <MdCheckCircle size={20} />
             </div>
-            <p className="stat-value text-white">{stats?.collectionRate || 0}%</p>
-            <p className="stat-label text-gray-400">City Efficiency Score</p>
+            <p className="stat-value">{stats?.collectionRate || 0}%</p>
+            <p className="stat-label">City Efficiency</p>
           </div>
         </div>
       </div>
@@ -166,7 +165,7 @@ export default function Dashboard({ role = 'admin' }) {
 
   // --- ADMIN DASHBOARD ---
   return (
-    <div className="space-y-8 pb-8">
+    <div className="space-y-6 pb-6">
       {/* Page Header */}
       <div className="page-header">
         <div className="page-header-inner">
@@ -176,7 +175,7 @@ export default function Dashboard({ role = 'admin' }) {
       </div>
 
       {/* Stat Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4 mb-2">
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
         {statCards.map((card, i) => (
           <div key={i} className="stat-card">
             <div className="stat-icon" style={{ background: card.bg }}>
@@ -189,51 +188,40 @@ export default function Dashboard({ role = 'admin' }) {
       </div>
 
       {/* Charts Row 1 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Waste Level Distribution - Pie Chart */}
-        <div className="brutalist-card p-5 bg-white flex flex-col">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="card p-5">
           <h3 className="section-title">Waste Level Distribution</h3>
-          <div className="flex-1 flex items-center justify-center">
+          <div className="flex items-center justify-center">
             <ResponsiveContainer width="100%" height={220}>
               <PieChart>
-                <Pie
-                  data={wasteLevelData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={85}
-                  dataKey="value"
-                  stroke="#121212"
-                  strokeWidth={2}
-                >
+                <Pie data={wasteLevelData} cx="50%" cy="50%" innerRadius={60} outerRadius={85} dataKey="value" stroke="#fff" strokeWidth={2}>
                   {wasteLevelData.map((entry, index) => (
                     <Cell key={index} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip contentStyle={TOOLTIP_STYLE} itemStyle={{ color: '#121212' }} />
+                <Tooltip contentStyle={TOOLTIP_STYLE} />
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="flex justify-center flex-wrap gap-4 pt-4 border-t-2 border-dashed border-gray-200">
+          <div className="flex justify-center flex-wrap gap-4 pt-3 border-t border-slate-100">
             {wasteLevelData.map((item, i) => (
-              <div key={i} className="flex items-center gap-2 font-bold text-sm">
-                <div className="w-3.5 h-3.5 rounded-sm border-2 border-black shrink-0" style={{ background: item.color }}></div>
+              <div key={i} className="flex items-center gap-2 text-sm font-medium text-slate-600">
+                <div className="w-3 h-3 rounded-full shrink-0" style={{ background: item.color }}></div>
                 <span>{item.name}: {item.value}</span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Collection Status */}
-        <div className="brutalist-card p-5 bg-white">
+        <div className="card p-5">
           <h3 className="section-title">Collection Status</h3>
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={statusData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-              <XAxis dataKey="name" tick={{ fill: '#121212', fontWeight: 600, fontSize: 12 }} axisLine={{ stroke: '#121212', strokeWidth: 2 }} />
-              <YAxis tick={{ fill: '#121212', fontWeight: 600, fontSize: 12 }} axisLine={{ stroke: '#121212', strokeWidth: 2 }} />
-              <Tooltip contentStyle={TOOLTIP_STYLE} cursor={{ fill: '#f1f5f9' }} />
-              <Bar dataKey="value" stroke="#121212" strokeWidth={2} radius={[4, 4, 0, 0]}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+              <XAxis dataKey="name" tick={{ fill: '#64748b', fontWeight: 500, fontSize: 12 }} axisLine={{ stroke: '#e2e8f0' }} />
+              <YAxis tick={{ fill: '#64748b', fontWeight: 500, fontSize: 12 }} axisLine={{ stroke: '#e2e8f0' }} />
+              <Tooltip contentStyle={TOOLTIP_STYLE} cursor={{ fill: '#f8fafc' }} />
+              <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                 {statusData.map((entry, index) => (
                   <Cell key={index} fill={entry.color} />
                 ))}
@@ -244,43 +232,41 @@ export default function Dashboard({ role = 'admin' }) {
       </div>
 
       {/* Charts Row 2 */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Weekly Trend */}
-        <div className="brutalist-card p-5 bg-white lg:col-span-2">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="card p-5 lg:col-span-2">
           <h3 className="section-title">Weekly Collection Trend</h3>
           <ResponsiveContainer width="100%" height={230}>
             <AreaChart data={weeklyTrend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-              <XAxis dataKey="day" tick={{ fill: '#121212', fontWeight: 600, fontSize: 12 }} axisLine={{ stroke: '#121212', strokeWidth: 2 }} />
-              <YAxis tick={{ fill: '#121212', fontWeight: 600, fontSize: 12 }} axisLine={{ stroke: '#121212', strokeWidth: 2 }} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+              <XAxis dataKey="day" tick={{ fill: '#64748b', fontWeight: 500, fontSize: 12 }} axisLine={{ stroke: '#e2e8f0' }} />
+              <YAxis tick={{ fill: '#64748b', fontWeight: 500, fontSize: 12 }} axisLine={{ stroke: '#e2e8f0' }} />
               <Tooltip contentStyle={TOOLTIP_STYLE} />
-              <Area type="monotone" dataKey="collections" stroke="#121212" fill="#10b981" strokeWidth={2} fillOpacity={0.6} />
-              <Area type="monotone" dataKey="reports" stroke="#121212" fill="#06b6d4" strokeWidth={2} fillOpacity={0.4} />
+              <Area type="monotone" dataKey="collections" stroke="#059669" fill="#d1fae5" strokeWidth={2} />
+              <Area type="monotone" dataKey="reports" stroke="#3b82f6" fill="#dbeafe" strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
-          <div className="flex gap-6 pt-3 border-t-2 border-dashed border-gray-200 mt-2">
-            <div className="flex items-center gap-2 text-sm font-bold">
-              <div className="w-3.5 h-3.5 rounded-sm border-2 border-black bg-[#10b981]"></div>
+          <div className="flex gap-5 pt-3 border-t border-slate-100 mt-2">
+            <div className="flex items-center gap-2 text-sm font-medium text-slate-600">
+              <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
               <span>Collections</span>
             </div>
-            <div className="flex items-center gap-2 text-sm font-bold">
-              <div className="w-3.5 h-3.5 rounded-sm border-2 border-black bg-[#06b6d4]"></div>
+            <div className="flex items-center gap-2 text-sm font-medium text-slate-600">
+              <div className="w-3 h-3 rounded-full bg-blue-500"></div>
               <span>Reports</span>
             </div>
           </div>
         </div>
 
-        {/* Waste Type Breakdown */}
-        <div className="brutalist-card p-5 bg-white flex flex-col">
+        <div className="card p-5 flex flex-col">
           <h3 className="section-title">Waste Type</h3>
           <div className="flex-1 flex items-center">
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={wasteTypeData} layout="vertical" margin={{ top: 0, right: 40, left: 10, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" horizontal={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" horizontal={false} />
                 <XAxis type="number" hide />
-                <YAxis type="category" dataKey="name" tick={{ fill: '#121212', fontWeight: 700, fontSize: 13 }} width={70} axisLine={{ stroke: '#121212', strokeWidth: 2 }} />
-                <Tooltip contentStyle={TOOLTIP_STYLE} cursor={{ fill: '#f1f5f9' }} />
-                <Bar dataKey="count" fill="#a855f7" stroke="#121212" strokeWidth={2} radius={[0, 4, 4, 0]} label={{ position: 'right', fill: '#121212', fontWeight: 800, fontSize: 16 }} />
+                <YAxis type="category" dataKey="name" tick={{ fill: '#64748b', fontWeight: 600, fontSize: 13 }} width={70} axisLine={{ stroke: '#e2e8f0' }} />
+                <Tooltip contentStyle={TOOLTIP_STYLE} cursor={{ fill: '#f8fafc' }} />
+                <Bar dataKey="count" fill="#8b5cf6" radius={[0, 6, 6, 0]} label={{ position: 'right', fill: '#1e293b', fontWeight: 700, fontSize: 14 }} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -288,14 +274,14 @@ export default function Dashboard({ role = 'admin' }) {
       </div>
 
       {/* Recent Reports Table */}
-      <div className="brutalist-card overflow-hidden">
-        <div className="px-5 py-4 border-b-[3px] border-black bg-white flex justify-between items-center">
-          <h3 className="text-sm font-extrabold uppercase tracking-widest">Recent Waste Reports</h3>
-          <span className="text-[11px] font-bold text-gray-400 uppercase">
+      <div className="card overflow-hidden">
+        <div className="px-5 py-4 border-b border-slate-100 flex justify-between items-center">
+          <h3 className="text-sm font-semibold text-slate-800">Recent Waste Reports</h3>
+          <span className="text-xs font-medium text-slate-400">
             {Math.min(wasteData.length, 8)} of {wasteData.length}
           </span>
         </div>
-        <div className="overflow-x-auto bg-white">
+        <div className="overflow-x-auto">
           <table className="brutalist-table w-full">
             <thead>
               <tr>
@@ -309,7 +295,7 @@ export default function Dashboard({ role = 'admin' }) {
             <tbody>
               {wasteData.slice(0, 8).map((report, i) => (
                 <tr key={i}>
-                  <td className="font-semibold">
+                  <td className="font-medium">
                     <span className="truncate block max-w-[200px]">
                       {report.address || `${report.location.lat.toFixed(4)}, ${report.location.lng.toFixed(4)}`}
                     </span>
@@ -317,19 +303,19 @@ export default function Dashboard({ role = 'admin' }) {
                   <td>
                     <span className={`badge badge-${report.wasteLevel.toLowerCase()}`}>{report.wasteLevel}</span>
                   </td>
-                  <td className="font-semibold text-gray-600">{report.wasteType}</td>
+                  <td className="text-slate-500">{report.wasteType}</td>
                   <td>
                     <span className={`badge ${report.status === 'Pending' ? 'badge-pending' : report.status === 'In Progress' ? 'badge-progress' : 'badge-collected'}`}>
                       {report.status}
                     </span>
                   </td>
-                  <td className="font-semibold text-gray-500 text-[13px]">{new Date(report.timestamp).toLocaleDateString()}</td>
+                  <td className="text-slate-400 text-[13px]">{new Date(report.timestamp).toLocaleDateString()}</td>
                 </tr>
               ))}
             </tbody>
           </table>
           {wasteData.length === 0 && (
-            <div className="p-8 text-center text-gray-400 font-semibold">No recent reports found.</div>
+            <div className="p-8 text-center text-slate-400 text-sm">No recent reports found.</div>
           )}
         </div>
       </div>

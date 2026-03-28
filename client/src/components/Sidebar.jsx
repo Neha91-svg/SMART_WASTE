@@ -1,5 +1,4 @@
 import { NavLink } from 'react-router-dom';
-import { useState } from 'react';
 import {
   MdDashboard,
   MdDeleteOutline,
@@ -14,22 +13,22 @@ import {
 } from 'react-icons/md';
 
 /**
- * Sidebar Component — Navigation with role toggle (Admin/User)
+ * Sidebar Component — Professional navigation with role toggle
  */
 export default function Sidebar({ role, setRole, mobileOpen, setMobileOpen }) {
   const userNavItems = [
-    { to: '/', icon: <MdDashboard size={26} />, label: 'Dashboard' },
-    { to: '/report-waste', icon: <MdDeleteOutline size={26} />, label: 'Report Waste' },
-    { to: '/request-pickup', icon: <MdLocalShipping size={26} />, label: 'Request Pickup' },
-    { to: '/ewaste-centers', icon: <MdRecycling size={26} />, label: 'E-Waste Centers' },
-    { to: '/ai-chat', icon: <MdSmartToy size={26} />, label: 'AI Assistant' },
+    { to: '/', icon: <MdDashboard size={20} />, label: 'Dashboard' },
+    { to: '/report-waste', icon: <MdDeleteOutline size={20} />, label: 'Report Waste' },
+    { to: '/request-pickup', icon: <MdLocalShipping size={20} />, label: 'Request Pickup' },
+    { to: '/ewaste-centers', icon: <MdRecycling size={20} />, label: 'E-Waste Centers' },
+    { to: '/ai-chat', icon: <MdSmartToy size={20} />, label: 'AI Assistant' },
   ];
 
   const adminNavItems = [
-    { to: '/', icon: <MdDashboard size={26} />, label: 'Dashboard' },
-    { to: '/map', icon: <MdMap size={26} />, label: 'Route Map' },
-    { to: '/efficiency', icon: <MdSpeed size={26} />, label: 'Efficiency' },
-    { to: '/ewaste-centers', icon: <MdRecycling size={26} />, label: 'E-Waste Centers' },
+    { to: '/', icon: <MdDashboard size={20} />, label: 'Dashboard' },
+    { to: '/map', icon: <MdMap size={20} />, label: 'Route Map' },
+    { to: '/efficiency', icon: <MdSpeed size={20} />, label: 'Efficiency' },
+    { to: '/ewaste-centers', icon: <MdRecycling size={20} />, label: 'E-Waste Centers' },
   ];
 
   const currentNavItems = role === 'admin' ? adminNavItems : userNavItems;
@@ -39,7 +38,7 @@ export default function Sidebar({ role, setRole, mobileOpen, setMobileOpen }) {
       {/* Mobile overlay */}
       {mobileOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -47,96 +46,78 @@ export default function Sidebar({ role, setRole, mobileOpen, setMobileOpen }) {
       <aside
         className={`fixed lg:relative top-0 left-0 h-screen z-50 transition-transform duration-300 lg:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
-        } w-[240px] shrink-0 flex flex-col`}
-        style={{ background: 'var(--bg-sidebar)', borderRight: '4px solid #121212' }}
+        } w-[260px] shrink-0 flex flex-col`}
+        style={{ background: '#0f172a' }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b-4" style={{ borderColor: '#121212' }}>
-          <div className="flex items-center gap-2.5">
-            <span className="text-2xl bg-[#facc15] text-black w-10 h-10 flex items-center justify-center rounded-lg border-2 border-black font-extrabold shadow-[2px_2px_0px_#121212]">
+        <div className="flex items-center justify-between p-5 border-b border-white/10">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 bg-emerald-500 rounded-lg flex items-center justify-center text-white text-lg shadow-md">
               ♻️
-            </span>
+            </div>
             <div>
-              <h1 className="text-lg font-black text-white uppercase tracking-tight leading-none">SmartWaste</h1>
-              <p className="text-[11px] text-[#10b981] font-bold uppercase tracking-widest mt-0.5">Platform</p>
+              <h1 className="text-[15px] font-bold text-white tracking-tight leading-none">SmartWaste</h1>
+              <p className="text-[10px] text-emerald-400 font-medium mt-0.5 tracking-wide">PLATFORM</p>
             </div>
           </div>
           
           <button
             onClick={() => setMobileOpen(false)}
-            className="p-1.5 rounded bg-white text-black lg:hidden border-2 border-black shadow-[2px_2px_0px_#121212]"
+            className="p-1.5 rounded-lg bg-white/10 text-white lg:hidden hover:bg-white/20 transition-colors"
           >
-            <MdClose size={22} />
+            <MdClose size={20} />
           </button>
         </div>
 
         {/* Navigation Links */}
-        <div className="px-5 mt-8 mb-3">
-          <p className="text-[11px] font-black text-gray-500 uppercase tracking-[0.2em]">Navigation</p>
+        <div className="px-5 mt-6 mb-2">
+          <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-[0.15em]">Menu</p>
         </div>
-        <nav className="px-3 flex flex-col gap-4 flex-1 overflow-y-auto mb-6">
+        <nav className="px-3 flex flex-col gap-1 flex-1 overflow-y-auto mb-4">
           {currentNavItems.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
               end={item.to === '/'}
               className={({ isActive }) =>
-                `group relative flex items-center justify-between px-4 py-3.5 rounded-lg font-extrabold text-[15px] uppercase tracking-wide border-2 transition-all ${
+                `flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium transition-all ${
                   isActive 
-                    ? 'bg-[#facc15] text-black border-black shadow-[4px_4px_0px_#121212] -translate-y-[2px]' 
-                    : 'bg-transparent text-gray-300 border-transparent hover:bg-white/5 hover:text-white'
+                    ? 'bg-emerald-500/15 text-emerald-400' 
+                    : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'
                 }`
               }
               onClick={() => setMobileOpen(false)}
             >
-              {({ isActive }) => (
-                <>
-                  <div className="flex items-center gap-4">
-                    {/* Optional left visual anchor mimicking the image's left bar, integrated with Brutalism */}
-                    {isActive && (
-                      <div className="absolute left-[-2px] inset-y-[-2px] w-2.5 bg-black border-r-2 border-black rounded-l-md" />
-                    )}
-                    <span className={`transition-transform duration-200 ${isActive ? 'translate-x-2' : ''}`}>
-                      {item.icon}
-                    </span>
-                    <span className={`transition-transform duration-200 ${isActive ? 'translate-x-2' : ''}`}>
-                      {item.label}
-                    </span>
-                  </div>
-                  {/* Right dot indicator for active state matching reference image */}
-                  {isActive && (
-                    <div className="w-2.5 h-2.5 rounded-full bg-black mr-1" />
-                  )}
-                </>
-              )}
+              {item.icon}
+              <span>{item.label}</span>
             </NavLink>
           ))}
         </nav>
 
         {/* Role Toggle */}
-        <div className="p-3 mt-auto border-t-2" style={{ borderColor: '#2a2a2a' }}>
-          <div className="bg-[#0f0f0f] p-2.5 border-2 border-gray-700 rounded-lg">
-            <p className="text-[10px] text-[#10b981] mb-2 font-black uppercase tracking-widest text-center">Active Role</p>
-            <div className="flex gap-2">
+        <div className="p-3 mt-auto border-t border-white/10">
+          <div className="px-1 pb-1">
+            <p className="text-[10px] text-slate-500 mb-2 font-semibold uppercase tracking-wider text-center">Active Role</p>
+            <div className="flex gap-1.5 bg-white/5 p-1 rounded-lg">
               <button
                 onClick={() => setRole('user')}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded text-xs font-extrabold uppercase transition-all border-2 ${
+                className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md text-xs font-semibold transition-all ${
                   role === 'user'
-                    ? 'bg-[#facc15] text-black border-black shadow-[2px_2px_0px_#121212]'
-                    : 'bg-transparent text-gray-500 border-gray-600 hover:border-gray-400 hover:text-white'
+                    ? 'bg-emerald-500 text-white shadow-md'
+                    : 'text-slate-400 hover:text-white hover:bg-white/10'
                 }`}
               >
-                <MdPerson size={18} /> User
+                <MdPerson size={16} /> User
               </button>
               <button
                 onClick={() => setRole('admin')}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded text-xs font-extrabold uppercase transition-all border-2 ${
+                className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md text-xs font-semibold transition-all ${
                   role === 'admin'
-                    ? 'bg-[#facc15] text-black border-black shadow-[2px_2px_0px_#121212]'
-                    : 'bg-transparent text-gray-500 border-gray-600 hover:border-gray-400 hover:text-white'
+                    ? 'bg-emerald-500 text-white shadow-md'
+                    : 'text-slate-400 hover:text-white hover:bg-white/10'
                 }`}
               >
-                <MdAdminPanelSettings size={18} /> Admin
+                <MdAdminPanelSettings size={16} /> Admin
               </button>
             </div>
           </div>
