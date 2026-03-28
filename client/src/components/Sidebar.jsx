@@ -1,128 +1,109 @@
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import {
   MdDashboard,
   MdDeleteOutline,
   MdLocalShipping,
   MdMap,
-  MdRecycling,
-  MdSpeed,
-  MdClose,
-  MdAdminPanelSettings,
-  MdPerson,
-  MdSmartToy
+  MdBarChart,
+  MdRestore,
+  MdSmartToy,
+  MdLogout,
+  MdEco
 } from 'react-icons/md';
 
 /**
- * Sidebar Component — Professional navigation with role toggle
+ * Sidebar Component — Pure White Floating Panel
  */
-export default function Sidebar({ role, setRole, mobileOpen, setMobileOpen }) {
-  const userNavItems = [
-    { to: '/', icon: <MdDashboard size={20} />, label: 'Dashboard' },
-    { to: '/report-waste', icon: <MdDeleteOutline size={20} />, label: 'Report Waste' },
-    { to: '/request-pickup', icon: <MdLocalShipping size={20} />, label: 'Request Pickup' },
-    { to: '/ewaste-centers', icon: <MdRecycling size={20} />, label: 'E-Waste Centers' },
-    { to: '/ai-chat', icon: <MdSmartToy size={20} />, label: 'AI Assistant' },
-  ];
+export default function Sidebar({ currentPath, closeMobile }) {
+  const { user, role, setRole, logout } = useAuth(); // Assume we still toggle role for demo
+  const isAdmin = role === 'Admin';
 
-  const adminNavItems = [
-    { to: '/', icon: <MdDashboard size={20} />, label: 'Dashboard' },
-    { to: '/map', icon: <MdMap size={20} />, label: 'Route Map' },
-    { to: '/efficiency', icon: <MdSpeed size={20} />, label: 'Efficiency' },
-    { to: '/ewaste-centers', icon: <MdRecycling size={20} />, label: 'E-Waste Centers' },
+  const menuItems = isAdmin ? [
+    { name: 'Dashboard', path: '/', icon: MdDashboard },
+    { name: 'Route Map', path: '/map', icon: MdMap },
+    { name: 'Efficiency', path: '/efficiency', icon: MdBarChart },
+    { name: 'E-Waste Centers', path: '/e-waste', icon: MdRestore },
+  ] : [
+    { name: 'Dashboard', path: '/', icon: MdDashboard },
+    { name: 'Report Waste', path: '/report', icon: MdDeleteOutline },
+    { name: 'Request Pickup', path: '/pickup', icon: MdLocalShipping },
+    { name: 'E-Waste Centers', path: '/e-waste', icon: MdRestore },
+    { name: 'AI Assistant', path: '/ai-chat', icon: MdSmartToy },
   ];
-
-  const currentNavItems = role === 'admin' ? adminNavItems : userNavItems;
 
   return (
     <>
-      {/* Mobile overlay */}
-      {mobileOpen && (
-        <div 
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 lg:hidden"
-          onClick={() => setMobileOpen(false)}
-        />
-      )}
+      {/* Brand Header */}
+      <div className="p-6 shrink-0 flex items-center gap-3 border-b border-slate-100/50">
+        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/30">
+          <MdEco size={24} />
+        </div>
+        <div>
+          <h1 className="font-extrabold text-xl tracking-tight text-slate-900 leading-none">Eco-Air</h1>
+          <p className="text-[10px] font-bold text-emerald-600 tracking-widest uppercase mt-1">Platform</p>
+        </div>
+      </div>
 
-      <aside
-        className={`fixed lg:relative top-0 left-0 h-screen z-50 transition-transform duration-300 lg:translate-x-0 ${
-          mobileOpen ? 'translate-x-0' : '-translate-x-full'
-        } w-[260px] shrink-0 flex flex-col`}
-        style={{ background: '#0f172a' }}
-      >
-        {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-emerald-500 rounded-lg flex items-center justify-center text-white text-lg shadow-md">
-              ♻️
-            </div>
-            <div>
-              <h1 className="text-[15px] font-bold text-white tracking-tight leading-none">SmartWaste</h1>
-              <p className="text-[10px] text-emerald-400 font-medium mt-0.5 tracking-wide">PLATFORM</p>
-            </div>
-          </div>
-          
+      {/* Navigation Links */}
+      <div className="flex-1 overflow-y-auto py-6 px-4 space-y-1.5 hide-scrollbar">
+        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-2">Menu</div>
+        {menuItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = currentPath === item.path;
+          return (
+            <NavLink
+              key={item.name}
+              to={item.path}
+              onClick={closeMobile}
+              className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-300 ${
+                isActive
+                  ? 'bg-emerald-50 text-emerald-700 font-bold shadow-sm'
+                  : 'text-slate-500 font-medium hover:bg-slate-50 hover:text-slate-900'
+              }`}
+            >
+              <Icon size={20} className={isActive ? 'text-emerald-500' : 'text-slate-400'} />
+              <span>{item.name}</span>
+            </NavLink>
+          );
+        })}
+      </div>
+
+      {/* Role Toggle & User Profile (Bottom) */}
+      <div className="p-4 shrink-0 bg-slate-50/50 border-t border-slate-100">
+        <div className="bg-white rounded-xl p-1.5 shadow-sm border border-slate-100 flex relative mb-4">
+          <div
+            className="absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-emerald-500 rounded-lg shadow-sm transition-transform duration-300 ease-out z-0"
+            style={{ transform: isAdmin ? 'translateX(calc(100% + 4px))' : 'translateX(0)' }}
+          />
           <button
-            onClick={() => setMobileOpen(false)}
-            className="p-1.5 rounded-lg bg-white/10 text-white lg:hidden hover:bg-white/20 transition-colors"
+            onClick={() => setRole('User')}
+            className={`flex-1 flex justify-center items-center py-2 text-xs font-bold rounded-lg relative z-10 transition-colors ${!isAdmin ? 'text-white' : 'text-slate-500 hover:text-slate-700'}`}
           >
-            <MdClose size={20} />
+            User
+          </button>
+          <button
+            onClick={() => setRole('Admin')}
+            className={`flex-1 flex justify-center items-center py-2 text-xs font-bold rounded-lg relative z-10 transition-colors ${isAdmin ? 'text-white' : 'text-slate-500 hover:text-slate-700'}`}
+          >
+            Admin
           </button>
         </div>
 
-        {/* Navigation Links */}
-        <div className="px-5 mt-6 mb-2">
-          <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-[0.15em]">Menu</p>
-        </div>
-        <nav className="px-3 flex flex-col gap-1 flex-1 overflow-y-auto mb-4">
-          {currentNavItems.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.to === '/'}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium transition-all ${
-                  isActive 
-                    ? 'bg-emerald-500/15 text-emerald-400' 
-                    : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'
-                }`
-              }
-              onClick={() => setMobileOpen(false)}
-            >
-              {item.icon}
-              <span>{item.label}</span>
-            </NavLink>
-          ))}
-        </nav>
-
-        {/* Role Toggle */}
-        <div className="p-3 mt-auto border-t border-white/10">
-          <div className="px-1 pb-1">
-            <p className="text-[10px] text-slate-500 mb-2 font-semibold uppercase tracking-wider text-center">Active Role</p>
-            <div className="flex gap-1.5 bg-white/5 p-1 rounded-lg">
-              <button
-                onClick={() => setRole('user')}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md text-xs font-semibold transition-all ${
-                  role === 'user'
-                    ? 'bg-emerald-500 text-white shadow-md'
-                    : 'text-slate-400 hover:text-white hover:bg-white/10'
-                }`}
-              >
-                <MdPerson size={16} /> User
-              </button>
-              <button
-                onClick={() => setRole('admin')}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md text-xs font-semibold transition-all ${
-                  role === 'admin'
-                    ? 'bg-emerald-500 text-white shadow-md'
-                    : 'text-slate-400 hover:text-white hover:bg-white/10'
-                }`}
-              >
-                <MdAdminPanelSettings size={16} /> Admin
-              </button>
-            </div>
+        <div className="flex items-center gap-3 px-2">
+          <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-blue-100 to-blue-50 flex items-center justify-center border border-blue-200 text-blue-600 font-bold text-sm shadow-sm">
+            {isAdmin ? 'A' : 'U'}
           </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-bold text-slate-800 truncate">{isAdmin ? 'Admin Console' : 'Ritesh Jadhav'}</p>
+            <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider truncate">{isAdmin ? 'System Admin' : 'Citizen'}</p>
+          </div>
+          {/* Mock logout button */}
+          <button className="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-red-50 hover:text-red-500 transition-colors">
+            <MdLogout size={16} />
+          </button>
         </div>
-      </aside>
+      </div>
     </>
   );
 }

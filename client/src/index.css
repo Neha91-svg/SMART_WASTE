@@ -1,436 +1,252 @@
 @import "tailwindcss";
 
-/* ============================================================
-   SMARTWASTE — PROFESSIONAL DESIGN SYSTEM
-   Clean, minimal, user-centric design with emerald green accent
-   ============================================================ */
-
 :root {
-  --primary: #059669;
-  --primary-light: #d1fae5;
-  --primary-dark: #047857;
-  --primary-50: #ecfdf5;
+  /* Hyper-Modern Premium Light Theme */
+  --bg-app: #F4F7FB;
+  --bg-card: #FFFFFF;
+  
+  --text-main: #0F172A;
+  --text-muted: #64748B;
+  --text-light: #94A3B8;
 
-  --bg-page: #f8fafc;
-  --bg-sidebar: #0f172a;
-  --bg-card: #ffffff;
-  --bg-card-hover: #f8fafc;
+  --primary: #10B981;
+  --primary-hover: #059669;
+  
+  --accent-blue: #0EA5E9;
+  --accent-indigo: #6366F1;
+  --accent-rose: #F43F5E;
+  --accent-amber: #F59E0B;
 
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  --text-muted: #94a3b8;
-  --text-inverse: #f1f5f9;
-
-  --border: #e2e8f0;
-  --border-dark: #cbd5e1;
-
-  --danger: #ef4444;
-  --warning: #f59e0b;
-  --info: #3b82f6;
-
-  --sidebar-width: 260px;
-  --radius: 12px;
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-  --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
-  --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
-  --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  --border-light: rgba(15, 23, 42, 0.05);
+  
+  --shadow-soft: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+  --shadow-float: 0 20px 40px -10px rgba(15, 23, 42, 0.08);
+  --shadow-btn: 0 8px 16px -4px rgba(16, 185, 129, 0.3);
+  
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--bg-page);
-  color: var(--text-primary);
-  min-height: 100vh;
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--bg-app);
+  color: var(--text-main);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 14px;
-  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+/* Premium Component Classes */
 
-/* ============================================================
-   CARD SYSTEM
-   ============================================================ */
-
-.card {
+.premium-card {
   background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border-light);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.card:hover {
-  box-shadow: var(--shadow);
+.premium-card:hover {
+  box-shadow: var(--shadow-float);
+  transform: translateY(-4px);
 }
 
-/* Legacy class mapping for backward compat */
-.brutalist-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
-  overflow: hidden;
-}
+/* Typography Hierarchy */
 
-.brutalist-card:hover {
-  box-shadow: var(--shadow);
-}
-
-/* ============================================================
-   PAGE HEADER
-   ============================================================ */
-
-.page-header {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-left: 4px solid var(--primary);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
-  margin-bottom: 1.5rem;
-}
-
-.page-header .page-header-inner {
-  padding: 1.5rem;
-}
-
-@media (min-width: 768px) {
-  .page-header .page-header-inner {
-    padding: 1.75rem 2rem;
-  }
-}
-
-.page-header h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  line-height: 1.2;
+.page-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
   margin-bottom: 0.5rem;
-  color: var(--text-primary);
 }
 
-@media (min-width: 768px) {
-  .page-header h1 {
-    font-size: 1.75rem;
-  }
-}
-
-.page-header .page-subtitle {
+.page-subtitle {
+  font-size: 1rem;
   font-weight: 500;
-  font-size: 0.875rem;
-  color: var(--text-secondary);
+  color: var(--text-muted);
 }
-
-/* ============================================================
-   SECTION TITLES
-   ============================================================ */
 
 .section-title {
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-secondary);
-  padding-bottom: 0.5rem;
-  margin-bottom: 1rem;
-  border-bottom: 1px solid var(--border);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
 }
 
-/* ============================================================
-   TABLES
-   ============================================================ */
+/* Stunning Buttons */
 
-.brutalist-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-}
-
-.brutalist-table th {
-  background: var(--primary-50);
-  border-bottom: 1px solid var(--border);
-  padding: 10px 16px;
-  font-weight: 600;
-  text-transform: uppercase;
-  font-size: 11px;
-  text-align: left;
-  letter-spacing: 0.5px;
-  color: var(--text-secondary);
-  white-space: nowrap;
-}
-
-.brutalist-table td {
-  border-bottom: 1px solid var(--border);
-  padding: 10px 16px;
-  font-size: 13px;
-  font-weight: 500;
-  background: var(--bg-card);
-  vertical-align: middle;
-  color: var(--text-primary);
-}
-
-.brutalist-table tr:last-child td { border-bottom: none; }
-.brutalist-table tr:hover td { background: var(--primary-50); }
-
-/* ============================================================
-   FORM INPUTS
-   ============================================================ */
-
-.form-input {
-  background: var(--bg-card);
-  border: 1px solid var(--border-dark);
-  border-radius: 8px;
-  padding: 10px 14px;
-  color: var(--text-primary);
-  font-size: 14px;
-  font-weight: 500;
-  width: 100%;
-  transition: all 0.2s ease;
-  outline: none;
-  font-family: inherit;
-}
-
-.form-input:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-light);
-}
-
-.form-input::placeholder {
-  color: var(--text-muted);
-  font-weight: 400;
-}
-
-/* ============================================================
-   BUTTONS
-   ============================================================ */
-
-.btn-primary {
-  background: var(--primary);
-  color: white;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 14px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
+.btn-premium {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  font-family: inherit;
-  box-shadow: var(--shadow-sm);
+  gap: 0.5rem;
+  background: linear-gradient(135deg, var(--primary) 0%, #059669 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-btn);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.btn-primary:hover {
-  background: var(--primary-dark);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
+.btn-premium:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 20px -4px rgba(16, 185, 129, 0.4);
 }
 
-.btn-primary:active {
-  transform: translateY(0);
-  box-shadow: var(--shadow-sm);
+.btn-premium:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 10px -2px rgba(16, 185, 129, 0.3);
 }
 
-.btn-primary:disabled {
-  background: #e2e8f0;
-  color: #94a3b8;
+.btn-premium:disabled {
+  background: #E2E8F0;
+  color: #94A3B8;
   box-shadow: none;
   cursor: not-allowed;
   transform: none;
 }
 
-/* ============================================================
-   BADGES
-   ============================================================ */
+/* Forms & Inputs */
 
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 2px 8px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.025em;
-  white-space: nowrap;
-}
-
-.badge-high { background: #fef2f2; color: #dc2626; }
-.badge-medium { background: #fffbeb; color: #d97706; }
-.badge-low { background: #ecfdf5; color: #059669; }
-.badge-pending { background: #fffbeb; color: #d97706; }
-.badge-progress { background: #eff6ff; color: #2563eb; }
-.badge-collected { background: #ecfdf5; color: #059669; }
-
-/* ============================================================
-   TOGGLE BUTTONS
-   ============================================================ */
-
-.toggle-btn {
-  flex: 1;
-  padding: 0.625rem;
-  border-radius: 8px;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  transition: all 0.15s ease;
-  border: 1px solid var(--border-dark);
-  background: white;
-  color: var(--text-secondary);
-  cursor: pointer;
-  text-align: center;
+.input-premium {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid #E2E8F0;
+  background: #F8FAFC;
   font-family: inherit;
-}
-
-.toggle-btn:hover {
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-.toggle-btn.active {
-  border-color: var(--primary);
-  background: var(--primary-light);
-  color: var(--primary-dark);
-}
-
-/* ============================================================
-   STAT CARDS
-   ============================================================ */
-
-.stat-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-main);
   transition: all 0.2s ease;
 }
 
-.stat-card:hover {
-  box-shadow: var(--shadow);
-  transform: translateY(-1px);
+.input-premium:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: #FFFFFF;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
 }
 
-.stat-card .stat-icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 8px;
+.input-premium::placeholder {
+  color: #94A3B8;
+  font-weight: 400;
+}
+
+/* Toggle Buttons for Selection */
+
+.radio-btn-group {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  margin-bottom: 0.75rem;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
-.stat-card .stat-value {
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1;
-  margin-bottom: 0.25rem;
-  color: var(--text-primary);
-}
-
-.stat-card .stat-label {
-  font-size: 0.6875rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+.radio-btn {
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-md);
+  border: 1px solid #E2E8F0;
+  background: #FFFFFF;
   color: var(--text-muted);
-  margin-top: auto;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-/* ============================================================
-   LOADING
-   ============================================================ */
-
-.loading-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 80vh;
+.radio-btn:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
 }
 
-.spinner {
-  width: 2.5rem;
-  height: 2.5rem;
-  border: 3px solid var(--border);
+.radio-btn.active {
+  background: #ECFDF5;
+  border-color: var(--primary);
+  color: var(--primary-hover);
+}
+
+/* Beautiful Status Badges */
+
+.badge-premium {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.badge-high {
+  background: #FEF2F2;
+  color: var(--accent-rose);
+}
+
+.badge-medium {
+  background: #FFFBEB;
+  color: var(--accent-amber);
+}
+
+.badge-low {
+  background: #ECFDF5;
+  color: var(--primary);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Gorgeous Loading Spinner */
+.spinner-premium {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(16, 185, 129, 0.2);
   border-top-color: var(--primary);
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin: 0 auto 1rem;
+  animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 @keyframes spin {
+  from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 
-/* ============================================================
-   SUCCESS ALERT
-   ============================================================ */
-
-.success-alert {
-  background: var(--primary-light);
-  border: 1px solid var(--primary);
-  border-radius: var(--radius);
-  padding: 1rem 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+/* Animation utilities */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
 }
 
-.success-alert .alert-title {
-  font-weight: 600;
-  font-size: 0.875rem;
-  color: var(--primary-dark);
+.animate-slide-up {
+  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.success-alert .alert-text {
-  font-weight: 500;
-  color: var(--primary-dark);
-  font-size: 0.8125rem;
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-/* ============================================================
-   RECHARTS OVERRIDES
-   ============================================================ */
-
-.recharts-cartesian-grid-vertical line,
-.recharts-cartesian-grid-horizontal line {
-  stroke: var(--border);
-}
-
-.recharts-text {
-  fill: var(--text-secondary);
-  font-weight: 500;
-  font-family: 'Inter', sans-serif;
-  font-size: 12px;
-}
-
-/* ============================================================
-   LEAFLET (deprecated but kept for safety)
-   ============================================================ */
-
-.leaflet-container {
-  background: #e2e8f0;
-  border-radius: var(--radius);
-  z-index: 1;
-  font-family: inherit;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }

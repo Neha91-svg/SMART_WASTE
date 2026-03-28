@@ -6,17 +6,19 @@ import {
 } from 'recharts';
 import { MdSpeed, MdTrendingUp, MdLocalGasStation, MdTimer, MdRoute, MdPlayArrow } from 'react-icons/md';
 
-const TOOLTIP_STYLE = {
-  background: '#fff',
-  border: '1px solid #e2e8f0',
-  borderRadius: '8px',
-  fontWeight: '500',
-  boxShadow: '0 4px 6px rgba(0,0,0,0.07)',
+const CHART_TOOLTIP = {
+  background: '#ffffff',
+  border: 'none',
+  borderRadius: '16px',
+  boxShadow: '0 20px 40px -10px rgba(15, 23, 42, 0.1)',
+  padding: '12px 16px',
+  fontWeight: '600',
+  color: '#0F172A',
   fontSize: '13px',
 };
 
 /**
- * Efficiency Simulation Page — Compare fixed vs optimized route
+ * Efficiency Simulation Page — Premium Light UI Metrics
  */
 export default function Efficiency() {
   const [metrics, setMetrics] = useState(null);
@@ -40,10 +42,10 @@ export default function Efficiency() {
 
   if (loading && !hasRun) {
     return (
-      <div className="loading-container">
+      <div className="flex items-center justify-center h-full min-h-[400px]">
         <div className="text-center">
-          <div className="spinner"></div>
-          <p className="text-slate-500 text-sm font-medium">Running efficiency simulation...</p>
+          <div className="spinner-premium mx-auto mb-4"></div>
+          <p className="text-slate-500 font-semibold tracking-wide">Running AI Simulation...</p>
         </div>
       </div>
     );
@@ -51,30 +53,32 @@ export default function Efficiency() {
 
   if (!metrics) {
     return (
-      <div className="loading-container">
-        <div className="text-center card p-10">
-          <MdSpeed size={48} className="mx-auto text-slate-300 mb-4" />
-          <h2 className="text-lg font-bold text-slate-700 mb-2">No Simulation Data</h2>
-          <p className="text-slate-500 text-sm mb-6">Load waste data and run the optimization.</p>
-          <button onClick={runSimulation} className="btn-primary"><MdPlayArrow size={20} /> Run Simulation</button>
+      <div className="flex items-center justify-center h-full min-h-[500px]">
+        <div className="premium-card p-12 text-center max-w-lg w-full">
+          <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
+            <MdSpeed size={40} className="text-blue-500" />
+          </div>
+          <h2 className="text-2xl font-extrabold text-slate-800 tracking-tight mb-2">Efficiency Engine Ready</h2>
+          <p className="text-slate-500 font-medium mb-8">Run the optimization simulation to calculate route efficiency, time savings, and estimated fuel reduction.</p>
+          <button onClick={runSimulation} className="btn-premium px-8 py-3 text-lg w-full"><MdPlayArrow size={24} /> Start Simulation</button>
         </div>
       </div>
     );
   }
 
   const distanceComparison = [
-    { name: 'Fixed Route', value: metrics.fixedDistance, fill: '#ef4444' },
-    { name: 'Optimized', value: metrics.optimizedDistance, fill: '#059669' },
+    { name: 'Standard Route', value: metrics.fixedDistance, fill: '#64748B' }, // Slate-500
+    { name: 'AI Optimized', value: metrics.optimizedDistance, fill: '#10B981' }, // Emerald
   ];
 
   const timeComparison = [
-    { name: 'Fixed Route', value: metrics.fixedTime, fill: '#f59e0b' },
-    { name: 'Optimized', value: metrics.optimizedTime, fill: '#3b82f6' },
+    { name: 'Standard Route', value: metrics.fixedTime, fill: '#64748B' },
+    { name: 'AI Optimized', value: metrics.optimizedTime, fill: '#0EA5E9' }, // Azure Blue
   ];
 
   const savingsData = [
-    { name: 'Distance', saved: metrics.distanceImprovement, fill: '#059669' },
-    { name: 'Time', saved: metrics.timeImprovement, fill: '#3b82f6' },
+    { name: 'Distance', saved: metrics.distanceImprovement, fill: '#10B981' },
+    { name: 'Time', saved: metrics.timeImprovement, fill: '#0EA5E9' },
   ];
 
   const fuelEstimate = {
@@ -86,77 +90,77 @@ export default function Efficiency() {
   const costSaved = (metrics.fuelSaved * 100).toFixed(0);
 
   const summaryCards = [
-    { label: 'Distance Saved', value: `${metrics.distanceSaved}`, unit: 'km', sub: `↓ ${metrics.distanceImprovement}%`, color: '#059669', icon: <MdRoute size={20} /> },
-    { label: 'Time Saved', value: `${metrics.timeSaved}`, unit: 'min', sub: `↓ ${metrics.timeImprovement}%`, color: '#3b82f6', icon: <MdTimer size={20} /> },
-    { label: 'Fuel Saved', value: `${fuelEstimate.saved}`, unit: 'L', sub: `≈ ₹${costSaved}`, color: '#f59e0b', icon: <MdLocalGasStation size={20} /> },
-    { label: 'Total Stops', value: `${metrics.totalStops}`, unit: '', sub: `${metrics.highPriorityStops} high priority`, color: '#8b5cf6', icon: <MdTrendingUp size={20} /> },
+    { label: 'Distance Reduced', value: `${metrics.distanceSaved}`, unit: 'km', sub: `↓ ${metrics.distanceImprovement}%`, colorStr: 'emerald', icon: <MdRoute size={24} /> },
+    { label: 'Time Regained', value: `${metrics.timeSaved}`, unit: 'min', sub: `↓ ${metrics.timeImprovement}%`, colorStr: 'blue', icon: <MdTimer size={24} /> },
+    { label: 'Fuel Conserved', value: `${fuelEstimate.saved}`, unit: 'L', sub: `≈ ₹${costSaved}`, colorStr: 'amber', icon: <MdLocalGasStation size={24} /> },
+    { label: 'Optimized Stops', value: `${metrics.totalStops}`, unit: '', sub: `${metrics.highPriorityStops} critical`, colorStr: 'indigo', icon: <MdTrendingUp size={24} /> },
   ];
 
   return (
-    <div className="space-y-6 pb-6">
-      <div className="page-header">
-        <div className="page-header-inner flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h1>Efficiency Metrics</h1>
-            <p className="page-subtitle">Compare fixed route vs. AI-optimized route performance</p>
-          </div>
-          <button onClick={runSimulation} disabled={loading} className="btn-primary px-5 shrink-0">
-            {loading ? (
-              <span className="flex items-center gap-2">
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                Running...
-              </span>
-            ) : (
-              <span className="flex items-center gap-2"><MdPlayArrow size={20} /> Re-run</span>
-            )}
-          </button>
+    <div className="space-y-8 pb-8">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 className="page-title">Performance Metrics</h1>
+          <p className="page-subtitle">Analyze AI-driven route optimization and resource savings.</p>
         </div>
+        <button onClick={runSimulation} disabled={loading} className="btn-premium px-6 py-3">
+          {loading ? (
+            <span className="flex items-center gap-2">
+              <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin"></div> Re-running...
+            </span>
+          ) : (
+            <span className="flex items-center gap-2"><MdPlayArrow size={22} /> Run Simulation Again</span>
+          )}
+        </button>
       </div>
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      {/* Summary Stat Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
         {summaryCards.map((card, i) => (
-          <div key={i} className="card p-4" style={{ borderTop: `3px solid ${card.color}` }}>
-            <div className="flex items-center gap-2 mb-3">
-              <div className="p-1.5 rounded-lg text-white shadow-sm" style={{ background: card.color }}>
+          <div key={i} className="premium-card p-5 group relative overflow-hidden">
+            <div className={`absolute top-0 right-0 p-4 opacity-5 group-hover:scale-125 transition-transform duration-500 text-${card.colorStr}-500`}>
+              {card.icon}
+            </div>
+            <div className="flex items-center gap-3 mb-4">
+              <div className={`w-10 h-10 rounded-xl bg-${card.colorStr}-50 flex items-center justify-center text-${card.colorStr}-600 shadow-sm`}>
                 {card.icon}
               </div>
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">{card.label}</span>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 leading-tight">{card.label}</span>
             </div>
-            <p className="text-2xl font-bold" style={{ color: card.color }}>
-              {card.value} {card.unit && <span className="text-sm font-semibold text-slate-400">{card.unit}</span>}
+            <p className="text-3xl font-black text-slate-800 tracking-tight">
+              {card.value} {card.unit && <span className="text-sm font-semibold text-slate-400 ml-1">{card.unit}</span>}
             </p>
-            <p className="text-xs font-medium text-slate-400 mt-1">{card.sub}</p>
+            <p className={`text-xs font-bold text-${card.colorStr}-600 mt-2 bg-${card.colorStr}-50 px-2 py-1 rounded inline-block`}>{card.sub}</p>
           </div>
         ))}
       </div>
 
       {/* Charts Row 1 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="card p-5">
-          <h3 className="section-title">Distance Comparison (km)</h3>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="premium-card p-6">
+          <h3 className="section-title">Distance Analyis (km)</h3>
           <ResponsiveContainer width="100%" height={260}>
-            <BarChart data={distanceComparison} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-              <XAxis dataKey="name" tick={{ fill: '#64748b', fontSize: 12, fontWeight: 500 }} axisLine={{ stroke: '#e2e8f0' }} />
-              <YAxis tick={{ fill: '#64748b', fontSize: 12, fontWeight: 500 }} axisLine={{ stroke: '#e2e8f0' }} />
-              <Tooltip cursor={{ fill: '#f8fafc' }} contentStyle={TOOLTIP_STYLE} formatter={(value) => [`${value} km`, 'Distance']} />
-              <Bar dataKey="value" barSize={50} radius={[6, 6, 0, 0]}>
+            <BarChart data={distanceComparison} margin={{ top: 20, right: 30, left: -20, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
+              <XAxis dataKey="name" tick={{ fill: '#64748B', fontSize: 12, fontWeight: 600 }} axisLine={false} tickLine={false} dy={10} />
+              <YAxis tick={{ fill: '#64748B', fontSize: 12, fontWeight: 600 }} axisLine={false} tickLine={false} />
+              <Tooltip cursor={{ fill: 'rgba(241, 245, 249, 0.5)' }} contentStyle={CHART_TOOLTIP} />
+              <Bar dataKey="value" barSize={60} radius={[8, 8, 8, 8]}>
                 {distanceComparison.map((entry, i) => (<Cell key={i} fill={entry.fill} />))}
               </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="card p-5">
-          <h3 className="section-title">Time Comparison (minutes)</h3>
+        <div className="premium-card p-6">
+          <h3 className="section-title">Time Analysis (minutes)</h3>
           <ResponsiveContainer width="100%" height={260}>
-            <BarChart data={timeComparison} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-              <XAxis dataKey="name" tick={{ fill: '#64748b', fontSize: 12, fontWeight: 500 }} axisLine={{ stroke: '#e2e8f0' }} />
-              <YAxis tick={{ fill: '#64748b', fontSize: 12, fontWeight: 500 }} axisLine={{ stroke: '#e2e8f0' }} />
-              <Tooltip cursor={{ fill: '#f8fafc' }} contentStyle={TOOLTIP_STYLE} formatter={(value) => [`${value} min`, 'Time']} />
-              <Bar dataKey="value" barSize={50} radius={[6, 6, 0, 0]}>
+            <BarChart data={timeComparison} margin={{ top: 20, right: 30, left: -20, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
+              <XAxis dataKey="name" tick={{ fill: '#64748B', fontSize: 12, fontWeight: 600 }} axisLine={false} tickLine={false} dy={10} />
+              <YAxis tick={{ fill: '#64748B', fontSize: 12, fontWeight: 600 }} axisLine={false} tickLine={false} />
+              <Tooltip cursor={{ fill: 'rgba(241, 245, 249, 0.5)' }} contentStyle={CHART_TOOLTIP} />
+              <Bar dataKey="value" barSize={60} radius={[8, 8, 8, 8]}>
                 {timeComparison.map((entry, i) => (<Cell key={i} fill={entry.fill} />))}
               </Bar>
             </BarChart>
@@ -164,68 +168,80 @@ export default function Efficiency() {
         </div>
       </div>
 
-      {/* Charts Row 2 */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="card p-5">
-          <h3 className="section-title">Improvement %</h3>
+      {/* Detailed Specs Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* Improvement % */}
+        <div className="premium-card p-6">
+          <h3 className="section-title">Efficiency Gains</h3>
           <ResponsiveContainer width="100%" height={230}>
             <BarChart data={savingsData} layout="vertical" margin={{ top: 5, right: 30, left: 10, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" horizontal={false} />
-              <XAxis type="number" tick={{ fill: '#64748b', fontSize: 12, fontWeight: 500 }} domain={[0, 100]} unit="%" axisLine={{ stroke: '#e2e8f0' }} />
-              <YAxis type="category" dataKey="name" tick={{ fill: '#64748b', fontSize: 12, fontWeight: 600 }} width={70} axisLine={{ stroke: '#e2e8f0' }} />
-              <Tooltip cursor={{ fill: '#f8fafc' }} contentStyle={TOOLTIP_STYLE} formatter={(value) => [`${value}%`, 'Improvement']} />
-              <Bar dataKey="saved" barSize={30} radius={[0, 6, 6, 0]}>
+              <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#E2E8F0" />
+              <XAxis type="number" domain={[0, 100]} unit="%" tick={{ fill: '#64748B', fontSize: 12, fontWeight: 600 }} axisLine={false} tickLine={false} />
+              <YAxis type="category" dataKey="name" tick={{ fill: '#64748B', fontSize: 13, fontWeight: 700 }} width={70} axisLine={false} tickLine={false} />
+              <Tooltip cursor={{ fill: 'rgba(241, 245, 249, 0.5)' }} contentStyle={CHART_TOOLTIP} />
+              <Bar dataKey="saved" barSize={36} radius={[0, 8, 8, 0]}>
                 {savingsData.map((entry, i) => (<Cell key={i} fill={entry.fill} />))}
               </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="card p-5 flex flex-col">
-          <h3 className="section-title">Fuel Usage</h3>
+        {/* Fuel Pie */}
+        <div className="premium-card p-6 flex flex-col">
+          <h3 className="section-title">Fuel Consumption</h3>
           <div className="flex-1 flex items-center justify-center">
             <ResponsiveContainer width="100%" height={200}>
               <PieChart>
-                <Pie data={[{ name: 'Fixed', value: parseFloat(fuelEstimate.fixed) }, { name: 'Optimized', value: parseFloat(fuelEstimate.optimized) }]} cx="50%" cy="50%" innerRadius={45} outerRadius={75} dataKey="value" stroke="#fff" strokeWidth={2}>
-                  <Cell fill="#ef4444" />
-                  <Cell fill="#059669" />
+                <Pie data={[{ name: 'Standard', value: parseFloat(fuelEstimate.fixed) }, { name: 'Optimized', value: parseFloat(fuelEstimate.optimized) }]} cx="50%" cy="50%" innerRadius={55} outerRadius={85} paddingAngle={4} dataKey="value" stroke="none" cornerRadius={6}>
+                  <Cell fill="#64748B" />
+                  <Cell fill="#F59E0B" />
                 </Pie>
-                <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(value) => [`${value} L`, 'Fuel']} />
+                <Tooltip contentStyle={CHART_TOOLTIP} />
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="flex justify-center gap-4 mt-2 text-xs font-medium text-slate-500">
-            <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-red-500"></div><span>Fixed: {fuelEstimate.fixed}L</span></div>
-            <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-emerald-500"></div><span>Optimized: {fuelEstimate.optimized}L</span></div>
+          <div className="flex justify-center gap-6 mt-4">
+            <div className="flex items-center gap-2 font-bold text-sm text-slate-600"><div className="w-3 h-3 rounded-full bg-slate-500"></div>Standard: {fuelEstimate.fixed}L</div>
+            <div className="flex items-center gap-2 font-bold text-sm text-slate-600"><div className="w-3 h-3 rounded-full bg-amber-500"></div>Optimal: {fuelEstimate.optimized}L</div>
           </div>
         </div>
 
-        <div className="card p-5">
-          <h3 className="section-title">Detailed Specs</h3>
-          <div className="space-y-0 text-sm">
-            <div className="grid grid-cols-3 gap-2 text-[10px] uppercase font-semibold text-slate-400 bg-slate-50 p-2.5 rounded-t-lg border-b border-slate-100">
-              <span>Metric</span>
-              <span className="text-center">Fixed</span>
-              <span className="text-center text-emerald-600">Optimal</span>
-            </div>
-            {[
-              { metric: 'Distance', fixed: `${metrics.fixedDistance} km`, optimal: `${metrics.optimizedDistance} km` },
-              { metric: 'Time', fixed: `${metrics.fixedTime} min`, optimal: `${metrics.optimizedTime} min` },
-              { metric: 'Fuel', fixed: `${fuelEstimate.fixed} L`, optimal: `${fuelEstimate.optimized} L` },
-              { metric: 'Cost (₹)', fixed: `₹${(parseFloat(fuelEstimate.fixed) * 100).toFixed(0)}`, optimal: `₹${(parseFloat(fuelEstimate.optimized) * 100).toFixed(0)}` },
-            ].map((row, i) => (
-              <div key={i} className={`grid grid-cols-3 gap-2 text-[13px] font-medium p-2.5 border-b border-slate-50 ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}`}>
-                <span className="text-slate-500">{row.metric}</span>
-                <span className="text-center text-red-500">{row.fixed}</span>
-                <span className="text-center text-emerald-600">{row.optimal}</span>
+        {/* Dense Specs Table */}
+        <div className="premium-card p-6">
+          <h3 className="section-title">Comparative Analysis</h3>
+          <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100 h-[calc(100%-3rem)] flex flex-col justify-between">
+            <div className="space-y-4">
+              <div className="flex justify-between items-end border-b border-slate-200 pb-2">
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Metrics</span>
+                <div className="flex text-xs font-bold uppercase tracking-wider gap-8 text-right">
+                  <span className="text-slate-400 w-16">Standard</span>
+                  <span className="text-emerald-500 w-16">AI Opt.</span>
+                </div>
               </div>
-            ))}
-            <div className="mt-3 p-3 bg-emerald-50 rounded-lg text-center">
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Overall Gain</p>
-              <p className="text-2xl font-bold text-emerald-600 mt-1">{metrics.distanceImprovement}%</p>
+              {[
+                { label: 'Drive Dist', std: `${metrics.fixedDistance}km`, opt: `${metrics.optimizedDistance}km` },
+                { label: 'Total Time', std: `${metrics.fixedTime}m`, opt: `${metrics.optimizedTime}m` },
+                { label: 'Fuel Usage', std: `${fuelEstimate.fixed}L`, opt: `${fuelEstimate.optimized}L` },
+                { label: 'Est. Cost', std: `₹${(parseFloat(fuelEstimate.fixed)*100).toFixed(0)}`, opt: `₹${(parseFloat(fuelEstimate.optimized)*100).toFixed(0)}` },
+              ].map((row, i) => (
+                <div key={i} className="flex justify-between items-center text-sm font-semibold">
+                  <span className="text-slate-600">{row.label}</span>
+                  <div className="flex gap-8 text-right">
+                    <span className="text-slate-500 w-16">{row.std}</span>
+                    <span className="text-emerald-600 w-16">{row.opt}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <div className="mt-6 pt-4 border-t border-slate-200 flex justify-between items-center">
+              <span className="font-bold text-slate-800">Total Efficiency Gain</span>
+              <span className="text-xl font-black text-emerald-500 bg-emerald-100 px-3 py-1 rounded-lg">+{metrics.distanceImprovement}%</span>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './contexts/AuthContext';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import ReportWaste from './pages/ReportWaste';
@@ -12,32 +12,30 @@ import './index.css';
 
 /**
  * Smart Waste Collection & E-Waste Disposal Application
- * Main entry point with React Router navigation
+ * Main entry point with React Router navigation & Global Auth Context
  */
-function App() {
-  // Role state: 'user' or 'admin' — controls visible features
-  const [role, setRole] = useState('admin');
+export default function App() {
+  const { role } = useAuth();
+  const isAdmin = role === 'Admin';
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<Layout role={role} setRole={setRole} />}>
+        <Route element={<Layout />}>
           {/* Shared Routes */}
-          <Route path="/" element={<Dashboard role={role} />} />
-          <Route path="/ewaste-centers" element={<EWasteCenters />} />
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/e-waste" element={<EWasteCenters />} />
 
           {/* User Only Routes */}
-          <Route path="/report-waste" element={role === 'user' ? <ReportWaste /> : <Navigate to="/" replace />} />
-          <Route path="/request-pickup" element={role === 'user' ? <RequestPickup /> : <Navigate to="/" replace />} />
-          <Route path="/ai-chat" element={role === 'user' ? <AIChatbot /> : <Navigate to="/" replace />} />
+          <Route path="/report" element={!isAdmin ? <ReportWaste /> : <Navigate to="/" replace />} />
+          <Route path="/pickup" element={!isAdmin ? <RequestPickup /> : <Navigate to="/" replace />} />
+          <Route path="/ai-chat" element={!isAdmin ? <AIChatbot /> : <Navigate to="/" replace />} />
 
           {/* Admin Only Routes */}
-          <Route path="/map" element={role === 'admin' ? <MapVisualization /> : <Navigate to="/" replace />} />
-          <Route path="/efficiency" element={role === 'admin' ? <Efficiency /> : <Navigate to="/" replace />} />
+          <Route path="/map" element={isAdmin ? <MapVisualization /> : <Navigate to="/" replace />} />
+          <Route path="/efficiency" element={isAdmin ? <Efficiency /> : <Navigate to="/" replace />} />
         </Route>
       </Routes>
     </BrowserRouter>
   );
 }
-
-export default App;
