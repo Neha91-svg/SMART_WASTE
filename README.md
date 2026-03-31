@@ -7,7 +7,6 @@
 A comprehensive, full-stack waste management ecosystem bridging the gap between residents, municipal admins, businesses/societies, and waste collection vendors. Powered by Machine Learning for predictive heatmaps and route optimization, and built with a premium "Eco-Air" UI design system.
 
 </div>
-
 ---
 
 ## 🌟 Project Overview
