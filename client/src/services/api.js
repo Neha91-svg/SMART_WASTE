@@ -114,5 +114,15 @@ export const updateCRMVendor = (id, data) => api.patch(`/crm/vendors/${id}`, dat
 /** Get aggregated CRM stats */
 export const getCRMStats = () => api.get('/crm/stats');
 
-export default api;
+// ============================================================
+// SATELLITE PREDICTION — Geospatial AI
+// ============================================================
 
+/** Run satellite waste prediction pipeline for a given bounding box */
+export const getSatellitePrediction = (params) =>
+  api.post('/satellite-predict', params);
+
+/** Check satellite engine health (GEE connection status) */
+export const getSatelliteHealth = () => api.get('/satellite-health');
+
+export default api;

@@ -18,6 +18,7 @@ const routeRoutes = require('./routes/route');
 const chatRoutes = require('./routes/chat');
 const predictionRoutes = require('./routes/prediction');
 const crmRoutes = require('./routes/crm');
+const satelliteRoutes = require('./routes/satellite');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -44,6 +45,7 @@ app.use('/api', routeRoutes);
 app.use('/api', chatRoutes);
 app.use('/api', predictionRoutes);
 app.use('/api', crmRoutes);
+app.use('/api', satelliteRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -90,7 +92,9 @@ async function startServer() {
       console.log(`   GET  /api/ml-health`);
       console.log(`   GET  /api/crm/customers`);
       console.log(`   GET  /api/crm/vendors`);
-      console.log(`   GET  /api/crm/stats\n`);
+      console.log(`   GET  /api/crm/stats`);
+      console.log(`   POST /api/satellite-predict`);
+      console.log(`   GET  /api/satellite-health\n`);
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error.message);

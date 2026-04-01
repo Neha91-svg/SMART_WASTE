@@ -103,3 +103,7 @@ ml_service/model.pkl
 ml_service/training_data.csv
 ml_service/model_meta.json
 ml_service/__pycache__/
+
+# GEE — Satellite Engine credentials (NEVER commit)
+ml_service/gee-key.json
+ml_service/.env

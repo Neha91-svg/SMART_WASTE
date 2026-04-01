@@ -17,6 +17,18 @@ By utilizing **four distinct user roles**, the platform ensures every stakeholde
 
 ---
 
+## 🛰️ AI Satellite Geospatial Pipeline (NEW)
+
+The platform now features a cutting-edge **Satellite AI Prediction** module that predicts waste accumulation hotspots before they happen using real-world multi-spectral satellite imagery and machine learning.
+
+*   **Sentinel-2 Imagery:** Integrates with Google Earth Engine (GEE) to live-fetch B4 (Red), B8 (NIR), and B11 (SWIR) multi-spectral bands.
+*   **Spectral Indices:** Dynamically calculates **NDVI** (Normalized Difference Vegetation Index) to detect destroyed vegetation and **NDBI** (Normalized Difference Built-up Index) to detect dense urban concrete.
+*   **OpenStreetMap (OSM) Integration:** Fuses satellite data with geographical infrastructure data (proximity to roads, bus stops, markets, and railway stations) using the Overpass API. Vectorized Haversine math ensures instant location processing.
+*   **Machine Learning:** A tuned **Random Forest Classifier** evaluates the environmental indicators using weak-supervision and outputs an accumulation risk score.
+*   **Organic Heatmap Visualization:** Risk data is plotted onto the frontend using React-Leaflet. Instead of rendering artificial grids, the system uses spatial jitter and **Percentile-based Thresholding (Top 150 points)** to render completely organic, sparse, highly accurate heatmap hotspots across the city.
+
+---
+
 ## ✨ Key Features by Role
 
 ### 👤 1. User (Resident)
@@ -27,7 +39,7 @@ By utilizing **four distinct user roles**, the platform ensures every stakeholde
 
 ### 👑 2. Admin (Municipal / Platform Manager)
 *   **Live Job Tracker:** Real-time satellite-style map tracking the status of all active pickups and vendor fleet locations.
-*   **Predictive Heatmaps:** AI-generated heatmaps visualizing waste density across the city, predicting overflow hotspots before they happen.
+*   **Predictive Heatmaps:** AI-generated heatmaps visualizing waste density across the city.
 *   **Optimized Route Map:** Automated Transport Salesperson Problem (TSP) logic calculating the most fuel-efficient routes for collection trucks.
 *   **Efficiency Analytics:** Rich data visualization using Recharts to track fleet performance, daily waste volumes, and platform growth.
 *   **B2B CRM:** Full Customer Relationship Management module. Track active Societies (Customers) and Fleet Operators (Vendors), complete with contact details, historically assigned orders, and financial transaction logs.
@@ -62,8 +74,9 @@ By utilizing **four distinct user roles**, the platform ensures every stakeholde
 
 ### Machine Learning (ML Service)
 *   **Framework:** Python 3.x + Flask
+*   **Engine:** Google Earth Engine (GEE), OpenStreetMap (OSM / Overpass)
 *   **Libraries:** NumPy, Pandas, Scikit-learn
-*   **Capabilities:** predictive heat-mapping, synthetic data generation, and theoretical image classification parsing.
+*   **Capabilities:** Predictive heat-mapping, vectorized spatial matrices, synthetic data generation.
 
 ---
 
@@ -88,8 +101,9 @@ SMART_WASTE/
 │   ├── seed.js                 # Database population script
 │   └── server.js               # Entry point
 └── ml_service/                 # Python Microservice
-    ├── app.py                  # Flask server
-    └── generate_data.py        # ML prediction logic
+    ├── gee-key.json            # Google Earth Engine Service Account credentials
+    ├── satellite_engine.py     # Sentinel-2 image extraction and Random Forest logic
+    └── app.py                  # Flask server for React frontend communication
 ```
 
 ---
@@ -106,6 +120,7 @@ SMART_WASTE/
 *   Node.js (v18+)
 *   MongoDB (Running locally on `mongodb://127.0.0.1:27017` or MongoDB Atlas)
 *   Python 3.8+ (For the ML Service)
+*   Google Earth Engine Access (Service Account JSON)
 
 ### 1. Clone the Repository
 ```bash
@@ -138,6 +153,15 @@ Open a new terminal configuration:
 ```bash
 cd ml_service
 pip install -r requirements.txt
+```
+Create a `.env` file in the `ml_service` directory with your Google Earth Engine config:
+```env
+GEE_SERVICE_ACCOUNT=your-service-account@developer.gserviceaccount.com
+GEE_KEY_PATH=gee-key.json
+GEE_PROJECT=your-gcp-project-name
+```
+Run the AI inference server:
+```bash
 python app.py
 ```
 *(The Flask server will run on port 5001)*

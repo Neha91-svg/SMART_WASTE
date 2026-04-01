@@ -199,9 +199,17 @@ def predict():
     })
 
 
+# ─── Satellite Prediction Module ──────────────────────────────
+
+from satellite_engine import satellite_bp, initialize_gee
+app.register_blueprint(satellite_bp)
+
 # ─── Main ─────────────────────────────────────────────────────
 
 if __name__ == "__main__":
+    # Attempt GEE initialization (non-blocking if credentials missing)
+    initialize_gee()
+
     if load_model():
         print("\n🚀 ML Prediction Server starting on http://localhost:5001")
         app.run(host="0.0.0.0", port=5001, debug=False)

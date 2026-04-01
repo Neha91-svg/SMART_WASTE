@@ -14,7 +14,8 @@ import {
   MdBusinessCenter,
   MdStorefront,
   MdExplore,
-  MdPeople
+  MdPeople,
+  MdSatelliteAlt
 } from 'react-icons/md';
 
 /**
@@ -33,6 +34,7 @@ export default function Sidebar({ currentPath, closeMobile }) {
           { name: 'Route Map', path: '/map', icon: MdMap },
           { name: 'Heatmap', path: '/heatmap', icon: MdGrain },
           { name: 'Efficiency', path: '/efficiency', icon: MdBarChart },
+          { name: 'Satellite AI', path: '/satellite', icon: MdSatelliteAlt },
           { name: 'E-Waste Centers', path: '/e-waste', icon: MdRestore },
         ];
       case 'Business':

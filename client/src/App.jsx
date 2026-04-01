@@ -13,6 +13,7 @@ import BusinessDashboard from './pages/BusinessDashboard';
 import VendorDashboard from './pages/VendorDashboard';
 import AdminTracker from './pages/AdminTracker';
 import AdminCRM from './pages/AdminCRM';
+import SatellitePrediction from './pages/SatellitePrediction';
 import './index.css';
 
 /**
@@ -47,6 +48,7 @@ export default function App() {
           <Route path="/map" element={isAdmin ? <MapVisualization /> : <Navigate to="/" replace />} />
           <Route path="/heatmap" element={isAdmin ? <Heatmap /> : <Navigate to="/" replace />} />
           <Route path="/efficiency" element={isAdmin ? <Efficiency /> : <Navigate to="/" replace />} />
+          <Route path="/satellite" element={isAdmin ? <SatellitePrediction /> : <Navigate to="/" replace />} />
 
           {/* Business Only Routes */}
           <Route path="/business" element={isBusiness ? <BusinessDashboard /> : <Navigate to="/" replace />} />
