@@ -40,7 +40,7 @@ The platform now features a cutting-edge **Satellite AI Prediction** module that
 ### 👑 2. Admin (Municipal / Platform Manager)
 *   **Live Job Tracker:** Real-time satellite-style map tracking the status of all active pickups and vendor fleet locations.
 *   **Predictive Heatmaps:** AI-generated heatmaps visualizing waste density across the city.
-*   **Optimized Route Map:** Automated Transport Salesperson Problem (TSP) logic calculating the most fuel-efficient routes for collection trucks.
+*   **Optimized Route Map:** Automated Transport Salesperson Problem (TSP) logic calculating the most fuel-efficient route points, which are integrated with the **Open Source Routing Machine (OSRM) API** to continuously trace true physical roads and driving paths.
 *   **Efficiency Analytics:** Rich data visualization using Recharts to track fleet performance, daily waste volumes, and platform growth.
 *   **B2B CRM:** Full Customer Relationship Management module. Track active Societies (Customers) and Fleet Operators (Vendors), complete with contact details, historically assigned orders, and financial transaction logs.
 

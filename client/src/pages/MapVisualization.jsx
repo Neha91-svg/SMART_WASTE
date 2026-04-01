@@ -27,6 +27,7 @@ export default function MapVisualization() {
   const [loadingData, setLoadingData] = useState(true);
   const [optimizing, setOptimizing] = useState(false);
   const [selectedWaste, setSelectedWaste] = useState(null);
+  const [roadPathCoordinates, setRoadPathCoordinates] = useState([]);
 
   useEffect(() => { fetchWasteData(); }, []);
 
@@ -38,10 +39,44 @@ export default function MapVisualization() {
 
   const handleOptimize = async () => {
     setOptimizing(true);
+    setRoadPathCoordinates([]); // Reset old path
     try { const res = await optimizeRoute({ lat: center[0], lng: center[1] }); setRouteData(res.data.data); }
     catch (err) { console.error('Route optimization failed:', err); alert('Failed to optimize route.'); }
     finally { setOptimizing(false); }
   };
+
+  // Fetch real road path from OSRM when route generates
+  useEffect(() => {
+    if (!routeData || !routeData.optimizedRoute || routeData.optimizedRoute.length < 2) {
+      setRoadPathCoordinates([]);
+      return;
+    }
+    
+    const fetchOSRMPath = async () => {
+      try {
+        // OSRM requires "longitude,latitude" format
+        const coordsStr = routeData.optimizedRoute.map(p => `${p.lng},${p.lat}`).join(';');
+        const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${coordsStr}?overview=full&geometries=geojson`;
+        
+        const res = await fetch(osrmUrl);
+        const data = await res.json();
+        
+        if (data.code === 'Ok' && data.routes && data.routes.length > 0) {
+          // GeoJSON provides [lng, lat], Leaflet wants [lat, lng]
+          const path = data.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
+          setRoadPathCoordinates(path);
+        } else {
+          // Fallback to straight lines
+          setRoadPathCoordinates(routeData.optimizedRoute.map(p => [p.lat, p.lng]));
+        }
+      } catch (err) {
+        console.error('OSRM fetch failed:', err);
+        setRoadPathCoordinates(routeData.optimizedRoute.map(p => [p.lat, p.lng]));
+      }
+    };
+    
+    fetchOSRMPath();
+  }, [routeData]);
 
   if (loadingData) {
     return (
@@ -121,8 +156,8 @@ export default function MapVisualization() {
                 );
               })}
 
-              {routeCoordinates.length > 0 && (
-                <Polyline positions={routeCoordinates} pathOptions={{ color: '#0F172A', weight: 4, dashArray: '10, 10' }} />
+              {roadPathCoordinates.length > 0 && (
+                <Polyline positions={roadPathCoordinates} pathOptions={{ color: '#0F172A', weight: 4 }} />
               )}
             </MapContainer>
           </div>
