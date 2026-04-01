@@ -94,6 +94,12 @@ SMART_WASTE/
 
 ---
 
+## 👥 Team Members
+- Ritesh Jadhav
+- Neha Gupta
+- Mayank Kalode
+
+
 ## 🚀 Getting Started
 
 ### Prerequisites
