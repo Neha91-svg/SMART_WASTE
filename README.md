@@ -126,7 +126,7 @@ SMART_WASTE/
 ### 1. Installation
 Clone the repository and install all dependencies (root, server, and client) with a single command:
 ```bash
-git clone https://github.com/THERITESHJADHAV/SMART_WASTE.git
+git clone https://github.com/Neha91-svg/SMART_WASTE.git
 cd SMART_WASTE
 npm run install:all
 ```
