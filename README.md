@@ -117,37 +117,42 @@ SMART_WASTE/
 ## 🚀 Getting Started
 
 ### Prerequisites
-*   Node.js (v18+)
+*   Node.js (v20+)
 *   MongoDB (Running locally on `mongodb://127.0.0.1:27017` or MongoDB Atlas)
+<<<<<<< Updated upstream
 *   Python 3.8+ (For the ML Service)
 *   Google Earth Engine Access (Service Account JSON)
+=======
+*   Python 3.10+ (For the ML Service)
+*   Docker & Docker Compose (Optional, for containerized deployment)
+>>>>>>> Stashed changes
 
-### 1. Clone the Repository
+### 1. Installation
+Clone the repository and install all dependencies (root, server, and client) with a single command:
 ```bash
 git clone https://github.com/THERITESHJADHAV/SMART_WASTE.git
 cd SMART_WASTE
+npm run install:all
 ```
 
-### 2. Setup the Node Backend
-```bash
-cd server
-npm install
-```
-Create a `.env` file in the `server` directory:
+### 2. Environment Setup
+Create `.env` files in `server/` and `client/` directories based on the provided `.env.example` files.
+
+**Server (.env):**
 ```env
 PORT=5000
 MONGO_URI=mongodb://127.0.0.1:27017/smartwaste
+GEMINI_API_KEY=your_key_here
 ML_SERVICE_URL=http://localhost:5001
 ```
-Run the seed script to populate realistic test data (Customers, Vendors, Pickups):
-```bash
-npm run seed
-```
-Start the backend server:
-```bash
-npm start
-```
 
+### 3. Local Development
+You can start all services (Backend, Frontend, and ML) concurrently from the root directory:
+```bash
+# Seed data (optional, first run only)
+npm run seed
+
+<<<<<<< Updated upstream
 ### 3. Setup the Python ML Service
 Open a new terminal configuration:
 ```bash
@@ -174,12 +179,32 @@ npm install
 ```
 Start the Vite development server:
 ```bash
+=======
+# Start everything
+>>>>>>> Stashed changes
 npm run dev
 ```
-
-The application will be accessible at **http://localhost:5173**. Use the **Role Switcher** at the bottom left of the Sidebar to instantly toggle between User, Admin, Business, and Vendor views.
+The application will be accessible at **http://localhost:5173**.
 
 ---
+
+## 🐳 Deployment (Docker)
+
+To deploy the entire stack using Docker Compose:
+
+1. Ensure your `.env` variables are set.
+2. Run the following command from the root:
+```bash
+docker-compose up --build
+```
+This will spin up:
+- **Express Backend** (Port 5000)
+- **React Frontend** (Served via Express in production mode)
+- **Python ML Service** (Port 5001)
+- **MongoDB** (Port 27017)
+
+---
+
 
 ## 🎨 The "Eco-Air" Design System
 This project features a meticulously crafted UI framework internally dubbed **Eco-Air**. Moving away from generic bootstrap designs, Eco-Air focuses on:

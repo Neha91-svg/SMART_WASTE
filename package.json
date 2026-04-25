@@ -1,0 +1,19 @@
+{
+  "name": "smart-waste-collection",
+  "version": "1.0.0",
+  "description": "Smart Waste Collection & E-Waste Disposal Platform",
+  "scripts": {
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\" \"npm run dev:ml\"",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "dev:ml": "cd ml_service && python app.py",
+    "build": "cd client && npm run build",
+    "start": "cd server && npm start",
+    "seed": "cd server && npm run seed",
+    "ml:train": "cd ml_service && python generate_data.py && python train_model.py"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

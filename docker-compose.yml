@@ -1,0 +1,28 @@
+services:
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/smartwaste
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - ML_SERVICE_URL=http://ml_service:5001
+      - NODE_ENV=production
+    depends_on:
+      - mongo
+      - ml_service
+
+  ml_service:
+    build: ./ml_service
+    ports:
+      - "5001:5001"
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:

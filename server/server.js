@@ -10,6 +10,8 @@ const cors = require('cors');
 const { connectDB } = require('./config/db');
 const { seedDatabase } = require('./seed');
 
+const path = require('path');
+
 // Import routes
 const wasteRoutes = require('./routes/waste');
 const pickupRoutes = require('./routes/pickup');
@@ -31,7 +33,9 @@ app.use(express.json({ limit: '10mb' }));
 
 // Request logging middleware
 app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  if (req.path.startsWith('/api')) {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  }
   next();
 });
 
@@ -53,6 +57,23 @@ app.get('/api/health', (req, res) => {
 });
 
 // ============================================================
+// PRODUCTION SETUP (Serve Frontend)
+// ============================================================
+if (process.env.NODE_ENV === 'production') {
+  const distPath = path.join(__dirname, '../client/dist');
+  app.use(express.static(distPath));
+  
+  // Any request that doesn't match an API route should serve index.html
+  app.get('*', (req, res) => {
+    if (!req.path.startsWith('/api')) {
+      res.sendFile(path.resolve(distPath, 'index.html'));
+    } else {
+      res.status(404).json({ error: 'API route not found' });
+    }
+  });
+}
+
+// ============================================================
 // ERROR HANDLING
 // ============================================================
 app.use((err, req, res, next) => {
@@ -60,7 +81,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal server error', details: err.message });
 });
 
-// Handle 404
+// Handle 404 for development (or if production static file wasn't matched)
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
