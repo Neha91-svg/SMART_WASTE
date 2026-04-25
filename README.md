@@ -119,13 +119,9 @@ SMART_WASTE/
 ### Prerequisites
 *   Node.js (v20+)
 *   MongoDB (Running locally on `mongodb://127.0.0.1:27017` or MongoDB Atlas)
-<<<<<<< Updated upstream
-*   Python 3.8+ (For the ML Service)
-*   Google Earth Engine Access (Service Account JSON)
-=======
 *   Python 3.10+ (For the ML Service)
+*   Google Earth Engine Access (Service Account JSON)
 *   Docker & Docker Compose (Optional, for containerized deployment)
->>>>>>> Stashed changes
 
 ### 1. Installation
 Clone the repository and install all dependencies (root, server, and client) with a single command:
@@ -136,7 +132,7 @@ npm run install:all
 ```
 
 ### 2. Environment Setup
-Create `.env` files in `server/` and `client/` directories based on the provided `.env.example` files.
+Create `.env` files in `server/`, `client/`, and `ml_service/` directories.
 
 **Server (.env):**
 ```env
@@ -146,44 +142,24 @@ GEMINI_API_KEY=your_key_here
 ML_SERVICE_URL=http://localhost:5001
 ```
 
+**ML Service (.env):**
+```env
+GEE_SERVICE_ACCOUNT=your-service-account@developer.gserviceaccount.com
+GEE_KEY_PATH=gee-key.json
+GEE_PROJECT=your-gcp-project-name
+```
+
 ### 3. Local Development
 You can start all services (Backend, Frontend, and ML) concurrently from the root directory:
 ```bash
 # Seed data (optional, first run only)
 npm run seed
 
-<<<<<<< Updated upstream
-### 3. Setup the Python ML Service
-Open a new terminal configuration:
-```bash
-cd ml_service
-pip install -r requirements.txt
-```
-Create a `.env` file in the `ml_service` directory with your Google Earth Engine config:
-```env
-GEE_SERVICE_ACCOUNT=your-service-account@developer.gserviceaccount.com
-GEE_KEY_PATH=gee-key.json
-GEE_PROJECT=your-gcp-project-name
-```
-Run the AI inference server:
-```bash
-python app.py
-```
-*(The Flask server will run on port 5001)*
-
-### 4. Setup the React Frontend
-Open a third terminal:
-```bash
-cd client
-npm install
-```
-Start the Vite development server:
-```bash
-=======
-# Start everything
->>>>>>> Stashed changes
+# Start everything (Frontend, Backend, and ML Service)
 npm run dev
 ```
+The application will be accessible at **http://localhost:5173**.
+
 The application will be accessible at **http://localhost:5173**.
 
 ---
