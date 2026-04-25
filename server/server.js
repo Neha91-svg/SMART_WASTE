@@ -28,10 +28,15 @@ const PORT = process.env.PORT || 5000;
 // ============================================================
 // MIDDLEWARE
 // ============================================================
+const allowedOrigin = process.env.CLIENT_URL 
+  ? process.env.CLIENT_URL.replace(/\/$/, "") 
+  : '*';
+
 const corsOptions = {
-  origin: process.env.CLIENT_URL || '*',
+  origin: allowedOrigin,
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 };
 app.use(cors(corsOptions));
 app.use(express.json({ limit: '10mb' }));
